@@ -57,7 +57,7 @@ public class CampusDAO {
 	public List<Campus> listarParaCriacaoAta(int idUsuario) throws SQLException{
 		Statement stmt = ConnectionDAO.getInstance().getConnection().createStatement();
 		
-		ResultSet rs = stmt.executeQuery("SELECT campus.* FROM campus " +
+		ResultSet rs = stmt.executeQuery("SELECT DISTINCT campus.* FROM campus " +
 				"INNER JOIN departamentos ON departamentos.idCampus=campus.idCampus " +
 				"INNER JOIN orgaos ON orgaos.idDepartamento=departamentos.idDepartamento " +
 				"WHERE campus.ativo=1 AND (orgaos.idPresidente=" + String.valueOf(idUsuario) + " OR orgaos.idSecretario=" + String.valueOf(idUsuario) + 

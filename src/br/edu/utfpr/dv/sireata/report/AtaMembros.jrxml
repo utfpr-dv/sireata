@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.beta-v201607260811 using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-13T14:46:10 -->
+<!-- 2017-03-13T21:07:42 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AtaMembros" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="78debad1-ed3f-4363-8377-27466178a1c6">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -30,29 +30,29 @@
 		<band height="25" splitType="Stretch">
 			<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
 			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="30" height="25" uuid="ca5fe178-1000-4ca0-af67-9374d04d9d22"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="10" width="30" height="15" uuid="ca5fe178-1000-4ca0-af67-9374d04d9d22"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Arial" size="11" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ordem}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="40" y="0" width="180" height="25" uuid="b5176573-063c-4cd8-9239-0597b962cf27"/>
-				<textElement verticalAlignment="Bottom">
+				<reportElement stretchType="RelativeToTallestObject" x="40" y="10" width="180" height="15" uuid="b5176573-063c-4cd8-9239-0597b962cf27"/>
+				<textElement verticalAlignment="Top">
 					<font size="11"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement stretchType="RelativeToTallestObject" x="230" y="0" width="30" height="25" uuid="c784dbbc-75db-46fa-b2bc-77901c27ceae"/>
-				<textElement textAlignment="Right" verticalAlignment="Bottom">
+				<reportElement stretchType="RelativeToTallestObject" x="230" y="10" width="30" height="15" uuid="c784dbbc-75db-46fa-b2bc-77901c27ceae"/>
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font fontName="Arial" size="11" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{ordem}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement stretchType="RelativeToTallestObject" x="270" y="0" width="180" height="25" uuid="2f8da74b-95ba-4f10-9483-582d887bc42c"/>
-				<textElement verticalAlignment="Bottom">
+				<reportElement stretchType="RelativeToTallestObject" x="270" y="10" width="180" height="15" uuid="2f8da74b-95ba-4f10-9483-582d887bc42c"/>
+				<textElement verticalAlignment="Top">
 					<font size="11" isItalic="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[IF($F{presente},"_____________________________",$F{motivo})]]></textFieldExpression>

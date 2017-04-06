@@ -52,7 +52,7 @@ public class OrgaoDAO {
 	
 	public List<Orgao> listarPorDepartamento(int idDepartamento) throws SQLException{
 		PreparedStatement stmt = ConnectionDAO.getInstance().getConnection().prepareStatement(
-				"SELECT orgaos.*, p.nome AS presidente, s.nome AS secretario, departamentos.nome AS departamento FROM orgaos " +
+				"SELECT DISTINCT orgaos.*, p.nome AS presidente, s.nome AS secretario, departamentos.nome AS departamento FROM orgaos " +
 				"INNER JOIN departamentos ON departamentos.iddepartamento=orgaos.iddepartamento " +
 				"INNER JOIN usuarios p ON p.idusuario=orgaos.idpresidente " +
 				"INNER JOIN usuarios s ON s.idusuario=orgaos.idsecretario " +
@@ -73,7 +73,7 @@ public class OrgaoDAO {
 	
 	public List<Orgao> listarPorCampus(int idCampus) throws SQLException{
 		PreparedStatement stmt = ConnectionDAO.getInstance().getConnection().prepareStatement(
-				"SELECT orgaos.*, p.nome AS presidente, s.nome AS secretario, departamentos.nome AS departamento FROM orgaos " +
+				"SELECT DISTINCT orgaos.*, p.nome AS presidente, s.nome AS secretario, departamentos.nome AS departamento FROM orgaos " +
 				"INNER JOIN departamentos ON departamentos.iddepartamento=orgaos.iddepartamento " +
 				"INNER JOIN usuarios p ON p.idusuario=orgaos.idpresidente " +
 				"INNER JOIN usuarios s ON s.idusuario=orgaos.idsecretario " +
@@ -95,7 +95,7 @@ public class OrgaoDAO {
 	public List<Orgao> listarParaCriacaoAta(int idDepartamento, int idUsuario) throws SQLException{
 		Statement stmt = ConnectionDAO.getInstance().getConnection().createStatement();
 		
-		ResultSet rs = stmt.executeQuery("SELECT orgaos.*, p.nome AS presidente, s.nome AS secretario, departamentos.nome AS departamento FROM orgaos " +
+		ResultSet rs = stmt.executeQuery("SELECT DISTINCT orgaos.*, p.nome AS presidente, s.nome AS secretario, departamentos.nome AS departamento FROM orgaos " +
 				"INNER JOIN departamentos ON departamentos.iddepartamento=orgaos.iddepartamento " +
 				"INNER JOIN usuarios p ON p.idusuario=orgaos.idpresidente " +
 				"INNER JOIN usuarios s ON s.idusuario=orgaos.idsecretario " +

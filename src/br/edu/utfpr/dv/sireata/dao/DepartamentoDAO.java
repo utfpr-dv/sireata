@@ -50,7 +50,7 @@ public class DepartamentoDAO {
 	public List<Departamento> listarTodos(boolean apenasAtivos) throws SQLException{
 		Statement stmt = ConnectionDAO.getInstance().getConnection().createStatement();
 		
-		ResultSet rs = stmt.executeQuery("SELECT departamentos.*, campus.nome AS nomeCampus " +
+		ResultSet rs = stmt.executeQuery("SELECT DISTINCT departamentos.*, campus.nome AS nomeCampus " +
 				"FROM departamentos INNER JOIN campus ON campus.idCampus=departamentos.idCampus " + 
 				(apenasAtivos ? " WHERE departamentos.ativo=1" : "") + " ORDER BY departamentos.nome");
 		
@@ -66,7 +66,7 @@ public class DepartamentoDAO {
 	public List<Departamento> listarPorCampus(int idCampus, boolean apenasAtivos) throws SQLException{
 		Statement stmt = ConnectionDAO.getInstance().getConnection().createStatement();
 		
-		ResultSet rs = stmt.executeQuery("SELECT departamentos.*, campus.nome AS nomeCampus " +
+		ResultSet rs = stmt.executeQuery("SELECT DISTINCT departamentos.*, campus.nome AS nomeCampus " +
 				"FROM departamentos INNER JOIN campus ON campus.idCampus=departamentos.idCampus " +
 				"WHERE departamentos.idCampus=" + String.valueOf(idCampus) + (apenasAtivos ? " AND departamentos.ativo=1" : "") + " ORDER BY departamentos.nome");
 		
@@ -82,7 +82,7 @@ public class DepartamentoDAO {
 	public List<Departamento> listarParaCriacaoAta(int idCampus, int idUsuario) throws SQLException{
 		Statement stmt = ConnectionDAO.getInstance().getConnection().createStatement();
 		
-		ResultSet rs = stmt.executeQuery("SELECT departamentos.*, campus.nome AS nomeCampus FROM departamentos " +
+		ResultSet rs = stmt.executeQuery("SELECT DISTINCT departamentos.*, campus.nome AS nomeCampus FROM departamentos " +
 				"INNER JOIN campus ON campus.idCampus=departamentos.idCampus " +
 				"INNER JOIN orgaos ON orgaos.idDepartamento=departamentos.idDepartamento " +
 				"WHERE departamentos.ativo=1 AND departamentos.idCampus=" + String.valueOf(idCampus) + " AND (orgaos.idPresidente=" + String.valueOf(idUsuario) + " OR orgaos.idSecretario=" + String.valueOf(idUsuario) + 
