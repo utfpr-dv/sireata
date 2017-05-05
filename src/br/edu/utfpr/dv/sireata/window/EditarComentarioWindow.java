@@ -71,7 +71,20 @@ public class EditarComentarioWindow extends EditarWindow {
 		this.taMotivo.setValue(this.comentario.getMotivo());
 		
 		if(Session.getUsuario().getIdUsuario() != this.comentario.getUsuario().getIdUsuario()){
-			this.setBotaoSalvarVisivel(false);
+			try{
+				AtaBO abo = new AtaBO();
+				Ata ata = abo.buscarPorPauta(this.comentario.getPauta().getIdPauta());
+				
+				if(!abo.isPresidenteOuSecretario(Session.getUsuario().getIdUsuario(), ata.getIdAta())){
+					this.setBotaoSalvarVisivel(false);
+				}
+			}catch(Exception e){
+				this.setBotaoSalvarVisivel(false);
+				
+				Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+				
+				Notification.show("Carregar Comentários", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+			}
 		}else{
 			try{
 				AtaBO bo = new AtaBO();
@@ -96,8 +109,10 @@ public class EditarComentarioWindow extends EditarWindow {
 			AtaBO abo = new AtaBO();
 			Ata ata = abo.buscarPorPauta(this.comentario.getPauta().getIdPauta());
 			
-			this.comentario.setSituacao((SituacaoComentario) this.cbSituacao.getValue());
-			this.comentario.setComentarios(this.taComentarios.getValue());
+			if(Session.getUsuario().getIdUsuario() == this.comentario.getUsuario().getIdUsuario()){
+				this.comentario.setSituacao((SituacaoComentario) this.cbSituacao.getValue());
+				this.comentario.setComentarios(this.taComentarios.getValue());
+			}
 			
 			if(abo.isPresidenteOuSecretario(Session.getUsuario().getIdUsuario(), ata.getIdAta())){
 				this.comentario.setSituacaoComentarios((SituacaoComentario) this.cbSituacaoComentarios.getValue());

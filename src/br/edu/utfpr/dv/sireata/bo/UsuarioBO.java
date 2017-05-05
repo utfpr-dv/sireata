@@ -204,7 +204,12 @@ public class UsuarioBO {
 		List<String> list2 = new ArrayList<String>();
 		
 		for(String s : list){
-			s = s.charAt(0) + s.substring(1).toLowerCase();
+			if(s.length() > 2){
+				s = s.charAt(0) + s.substring(1).toLowerCase();	
+			}else{
+				s = s.toLowerCase();
+			}
+			
 			list2.add(s);
 		}
 		

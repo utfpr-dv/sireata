@@ -73,7 +73,7 @@ public class SireataUI extends UI {
                 } else if (isLoggedIn && isLoginView) {
                     // If someone tries to access to login view while logged in,
                     // then cancel
-                    return false;
+                    return true;
                 } else if(!isMainView && !isLoginView) {
                 	return true;
                 }

@@ -26,7 +26,7 @@ public class EditarPautaWindow extends EditarWindow {
 	private final Button btComentarios;
 	private final Button btComentar;
 	
-	public EditarPautaWindow(Pauta pauta, boolean aceitarComentarios, EditarAtaWindow parentWindow){
+	public EditarPautaWindow(Pauta pauta, boolean aceitarComentarios, boolean permiteSalvar, EditarAtaWindow parentWindow){
 		super("Editar Pauta", null);
 		
 		if(pauta == null){
@@ -71,6 +71,8 @@ public class EditarPautaWindow extends EditarWindow {
 		}
 		
 		this.btComentar.setWidth("200px");
+		
+		this.setBotaoSalvarVisivel(permiteSalvar);
 		
 		this.carregarPauta();
 	}

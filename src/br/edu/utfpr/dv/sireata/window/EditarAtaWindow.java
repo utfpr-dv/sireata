@@ -398,6 +398,7 @@ public class EditarAtaWindow extends EditarWindow {
 					this.btEditarParticipante.setVisible(false);
 					this.btRemoverParticipante.setVisible(false);
 					this.setBotaoSalvarVisivel(false);
+					this.btEditarPauta.setCaption("Visualizar Item");
 				}
 				
 				AtaReport report = bo.gerarAtaReport(this.ata);
@@ -566,8 +567,13 @@ public class EditarAtaWindow extends EditarWindow {
 			}
 		}
 		
+		int ordem = 1;
 		for(Pauta p : this.ata.getPauta()){
+			p.setOrdem(ordem);
+			
 			this.gridPauta.addRow(p.getOrdem(), p.getTitulo());
+			
+			ordem++;
 		}
 	}
 	
@@ -664,7 +670,7 @@ public class EditarAtaWindow extends EditarWindow {
 		
 		this.indexPauta = -1;
 		
-		UI.getCurrent().addWindow(new EditarPautaWindow(pauta, false, this));
+		UI.getCurrent().addWindow(new EditarPautaWindow(pauta, false, true, this));
 	}
 	
 	private void editarPauta(){
@@ -673,7 +679,7 @@ public class EditarAtaWindow extends EditarWindow {
 		if(this.indexPauta == -1){
 			Notification.show("Editar Pauta", "Selecione a pauta para editar.", Notification.Type.WARNING_MESSAGE);
 		}else{
-			UI.getCurrent().addWindow(new EditarPautaWindow(this.ata.getPauta().get(this.indexPauta), this.ata.isAceitarComentarios(), this));
+			UI.getCurrent().addWindow(new EditarPautaWindow(this.ata.getPauta().get(this.indexPauta), this.ata.isAceitarComentarios(), this.isBotaoSalvarVisivel(), this));
 		}
 	}
 	
@@ -805,6 +811,7 @@ public class EditarAtaWindow extends EditarWindow {
                     		
                     		Notification.show("Publicar Ata", "Ata publicada com sucesso.", Notification.Type.WARNING_MESSAGE);
                     		
+                    		atualizarGridPai();
                     		close();
 						} catch (Exception e) {
 							Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);

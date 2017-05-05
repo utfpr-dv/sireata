@@ -192,11 +192,15 @@ public class AtaBO {
 			int id = dao.salvar(ata);
 			
 			if(ata.getPauta() != null){
+				int i = 1;
+				
 				for(Pauta p : ata.getPauta()){
 					PautaDAO pdao = new PautaDAO();
 					
 					p.getAta().setIdAta(id);
+					p.setOrdem(i);
 					pdao.salvar(p);
+					i++;
 				}
 			}
 			
