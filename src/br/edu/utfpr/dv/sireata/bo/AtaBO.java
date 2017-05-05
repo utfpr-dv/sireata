@@ -23,6 +23,7 @@ import br.edu.utfpr.dv.sireata.util.StringUtils;
 import br.edu.utfpr.dv.sireata.model.Ata.TipoAta;
 import br.edu.utfpr.dv.sireata.model.AtaParticipante;
 import br.edu.utfpr.dv.sireata.model.AtaReport;
+import br.edu.utfpr.dv.sireata.model.Orgao;
 import br.edu.utfpr.dv.sireata.model.ParticipanteReport;
 
 public class AtaBO {
@@ -293,10 +294,11 @@ public class AtaBO {
 	
 	public AtaReport gerarAtaReport(int idAta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
-			PautaDAO pdao = new PautaDAO();
-			AtaParticipanteDAO apdao = new AtaParticipanteDAO();
-			Ata ata = dao.buscarPorId(idAta);
+			PautaBO pbo = new PautaBO();
+			AtaParticipanteBO apbo = new AtaParticipanteBO();
+			OrgaoBO obo = new OrgaoBO();
+			Ata ata = this.buscarPorId(idAta);
+			Orgao orgao = obo.buscarPorId(ata.getOrgao().getIdOrgao());
 			AtaReport report = new AtaReport();
 			String texto;
 			DecimalFormat df = new DecimalFormat("00");
@@ -311,11 +313,11 @@ public class AtaBO {
 					" realizou-se a " + StringUtils.getExtensoOrdinal(ata.getNumero(), true) +
 					" reunião " + (ata.getTipo() == TipoAta.ORDINARIA ? "ordinária" : "extraordinária") +
 					" de " + String.valueOf(DateUtils.getYear(ata.getData())) + " do(a) " +
-					StringEscapeUtils.escapeHtml4(ata.getOrgao().getNomeCompleto()) + ", a qual foi conduzida pelo(a) " + 
-					StringEscapeUtils.escapeHtml4(ata.getOrgao().getDesignacaoPresidente()) +
+					StringEscapeUtils.escapeHtml4(orgao.getNomeCompleto()) + ", a qual foi conduzida pelo(a) " + 
+					StringEscapeUtils.escapeHtml4(orgao.getDesignacaoPresidente()) + " " +
 					StringEscapeUtils.escapeHtml4(ata.getPresidente().getNome()) + " e teve como pauta: <b>";
 			
-			ata.setPauta(pdao.listarPorAta(idAta));
+			ata.setPauta(pbo.listarPorAta(idAta));
 			
 			for(int i = 1; i <= ata.getPauta().size(); i++){
 				texto += "(" + String.valueOf(i) + ") " + StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getTitulo()) + (i == ata.getPauta().size() ? "." : "; ");
@@ -333,7 +335,7 @@ public class AtaBO {
 			
 			report.setTexto(texto);
 			
-			ata.setParticipantes(apdao.listarPorAta(idAta));
+			ata.setParticipantes(apbo.listarPorAta(idAta));
 			
 			for(AtaParticipante participante : ata.getParticipantes()){
 				OrgaoDAO odao = new OrgaoDAO();
