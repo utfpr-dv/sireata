@@ -9,27 +9,23 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
-import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Notification;
+import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-
-import br.edu.utfpr.dv.sireata.component.MenuBar;
 
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
 import com.vaadin.ui.Grid.SingleSelectionModel;
 
-public abstract class ListView extends CustomComponent implements View {
+public abstract class ListView extends BasicView {
 
-	private MenuBar menu;
     private Grid grid;
     private final Button btAdicionar;
     private final Button btEditar;
@@ -40,6 +36,7 @@ public abstract class ListView extends CustomComponent implements View {
     private final VerticalLayout vlFiltros;
     private final Button btFiltrar;
     private final List<GridItem> gridItens;
+    private final Panel panelFiltros;
     
     public ListView(){
     	this.gridItens = new ArrayList<GridItem>();
@@ -82,8 +79,9 @@ public abstract class ListView extends CustomComponent implements View {
 		this.btExcluir.setWidth("150px");
 		
 		this.vlBotoes = new VerticalLayout(btAdicionar, btEditar, btExcluir);
-		this.vlBotoes.setWidth("150px");
 		this.vlBotoes.setSpacing(true);
+		this.vlBotoes.setMargin(true);
+		this.vlBotoes.setSizeFull();
 		
 		this.btFiltrar = new Button("Filtrar", new Button.ClickListener() {
             @Override
@@ -106,31 +104,38 @@ public abstract class ListView extends CustomComponent implements View {
 		
 		this.vlFiltros = new VerticalLayout(this.hlCampos, this.btFiltrar);
 		this.vlFiltros.setSpacing(true);
+		this.vlFiltros.setMargin(true);
+		
+		this.panelFiltros = new Panel("Filtros");
+		this.panelFiltros.setContent(this.vlFiltros);
 		
 		this.hlGrid = new HorizontalLayout();
 		this.hlGrid.setSizeFull();
-		this.hlGrid.setSpacing(true);
+		//this.hlGrid.setSpacing(true);
 		
 		this.setCaption("SIREATA - Sistema de Registro de Atas");
-    	this.menu = new MenuBar();
     	this.setSizeFull();
-		VerticalLayout vl = new VerticalLayout(this.menu, this.vlFiltros, this.hlGrid);
+		VerticalLayout vl = new VerticalLayout(this.panelFiltros, this.hlGrid);
 		vl.setSizeFull();
 		vl.setExpandRatio(this.hlGrid, 1);
-		vl.setSpacing(true);
-		this.setCompositionRoot(vl);
+		//vl.setSpacing(true);
+		this.setContent(vl);
     }
     
     protected abstract void carregarGrid();
     
     public void atualizarGrid(){
+    	Panel panelButtons = new Panel("Ações");
+    	panelButtons.setContent(this.vlBotoes);
+    	panelButtons.setWidth("170px");
+    	
     	this.grid = new Grid();
     	this.grid.setSizeFull();
     	this.carregarGrid();
     	this.hlGrid.removeAllComponents();
     	this.hlGrid.addComponent(this.grid);
-    	this.hlGrid.addComponent(this.vlBotoes);
-    	this.hlGrid.setComponentAlignment(this.vlBotoes, Alignment.TOP_RIGHT);
+    	this.hlGrid.addComponent(panelButtons);
+    	this.hlGrid.setComponentAlignment(panelButtons, Alignment.TOP_RIGHT);
     	this.hlGrid.setExpandRatio(this.grid, 1);
     }
     
@@ -154,11 +159,11 @@ public abstract class ListView extends CustomComponent implements View {
     }
     
     public void setFiltrosVisiveis(boolean visible){
-    	this.vlFiltros.setVisible(visible);
+    	this.panelFiltros.setVisible(visible);
     }
     
     public boolean isFiltrosVisiveis(){
-    	return this.vlFiltros.isVisible();
+    	return this.panelFiltros.isVisible();
     }
     
     public void setBotaoAdicionarVisivel(boolean visible){

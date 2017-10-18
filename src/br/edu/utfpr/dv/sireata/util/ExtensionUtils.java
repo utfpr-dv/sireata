@@ -6,15 +6,16 @@ import java.io.InputStream;
 import com.vaadin.server.Extension;
 import com.vaadin.server.FileDownloader;
 import com.vaadin.server.StreamResource;
+import com.vaadin.ui.AbstractComponent;
 import com.vaadin.ui.Button;
 
 public class ExtensionUtils {
 
-	public void extendToDownload(String fileName, byte[] fileData, Button buttonToExtend){
+	public void extendToDownload(String fileName, byte[] fileData, AbstractComponent buttonToExtend){
 		this.extendToDownload(fileName, fileData, buttonToExtend, true);
 	}
 	
-	public void extendToDownload(String fileName, byte[] fileData, Button buttonToExtend, boolean removeExtensions){
+	public void extendToDownload(String fileName, byte[] fileData, AbstractComponent buttonToExtend, boolean removeExtensions){
 		StreamResource sr = this.downloadFile(fileName, fileData);
     	FileDownloader fileDownloader = new FileDownloader(sr);
     	
@@ -25,7 +26,7 @@ public class ExtensionUtils {
     	fileDownloader.extend(buttonToExtend);
 	}
 	
-	public void removeAllExtensions(Button button){
+	public void removeAllExtensions(AbstractComponent button){
 		while(button.getExtensions().size() > 0){
 			button.removeExtension((Extension)button.getExtensions().toArray()[0]);
         }

@@ -6,28 +6,23 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
 
-import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 
+import br.edu.utfpr.dv.sireata.view.AtaPublicadaView;
 import br.edu.utfpr.dv.sireata.view.AtaView;
 import br.edu.utfpr.dv.sireata.view.CampusView;
 import br.edu.utfpr.dv.sireata.view.DepartamentoView;
-import br.edu.utfpr.dv.sireata.view.ListView;
 import br.edu.utfpr.dv.sireata.view.LoginView;
 import br.edu.utfpr.dv.sireata.view.MainView;
 import br.edu.utfpr.dv.sireata.view.OrgaoView;
 import br.edu.utfpr.dv.sireata.view.UsuarioView;
 
 @SuppressWarnings("serial")
-@Theme("sireata")
+@Theme("facebook")
 public class SireataUI extends UI {
 
 	@WebServlet(value = "/*", asyncSupported = true)
@@ -50,6 +45,7 @@ public class SireataUI extends UI {
         getNavigator().addView(OrgaoView.NAME, OrgaoView.class);
         getNavigator().addView(UsuarioView.NAME, UsuarioView.class);
         getNavigator().addView(AtaView.NAME, AtaView.class);
+        getNavigator().addView(AtaPublicadaView.NAME, AtaPublicadaView.class);
         
         //
         // We use a view change handler to ensure the user is always redirected
@@ -64,8 +60,9 @@ public class SireataUI extends UI {
                 boolean isLoggedIn = Session.isAutenticado();
                 boolean isLoginView = event.getNewView() instanceof LoginView;
                 boolean isMainView = event.getNewView() instanceof MainView;
+                boolean isAtaPublicadaView = event.getNewView() instanceof AtaPublicadaView;
                 
-                if (!isLoggedIn && !isLoginView) {
+                if (!isLoggedIn && !isLoginView && !isAtaPublicadaView) {
                     // Redirect to login view always if a user has not yet
                     // logged in
                     getNavigator().navigateTo(LoginView.NAME);

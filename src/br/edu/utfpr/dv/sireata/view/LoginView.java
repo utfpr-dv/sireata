@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import com.vaadin.event.ShortcutAction.KeyCode;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CustomComponent;
@@ -20,6 +21,7 @@ import br.edu.utfpr.dv.sireata.bo.UsuarioBO;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.themes.ValoTheme;
 
 public class LoginView extends CustomComponent implements View {
 	
@@ -55,12 +57,17 @@ public class LoginView extends CustomComponent implements View {
     	this.user.setWidth("300px");
     	this.user.setInputPrompt("Informe seu nome de usuário");
     	this.user.setInvalidAllowed(false);
+    	this.user.setNullRepresentation("");
+    	this.user.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+    	this.user.setIcon(FontAwesome.USER);
 
     	this.password = new PasswordField("Senha");
     	this.password.setWidth("300px");
     	this.password.setInputPrompt("Informe sua senha");
-    	this.password.setValue("");
+    	//this.password.setValue("");
     	this.password.setNullRepresentation("");
+    	this.password.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
+    	this.password.setIcon(FontAwesome.LOCK);
         
     	this.loginButton = new Button("Login", new Button.ClickListener() {
             @Override

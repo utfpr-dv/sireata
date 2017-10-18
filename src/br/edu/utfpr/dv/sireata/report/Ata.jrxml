@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.3.1.beta-v201607260811 using JasperReports Library version 6.3.1  -->
-<!-- 2017-03-13T14:50:06 -->
+<!-- 2017-10-16T21:41:21 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Ata" pageWidth="595" pageHeight="842" columnWidth="454" leftMargin="85" rightMargin="56" topMargin="70" bottomMargin="85" uuid="36d8a6c9-5765-44de-ad05-a1ec4a57f544">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -256,7 +256,7 @@
 		</band>
 		<band height="82">
 			<printWhenExpression><![CDATA[$F{demaisParticipantes}.size() > 0.0]]></printWhenExpression>
-			<subreport overflowType="NoStretch">
+			<subreport overflowType="Stretch">
 				<reportElement positionType="Float" x="0" y="47" width="455" height="30" uuid="1d88e616-e51e-47f3-8146-d2e4b641f4f0">
 					<printWhenExpression><![CDATA[$F{demaisParticipantes}.size() > 0.0]]></printWhenExpression>
 				</reportElement>

@@ -500,7 +500,7 @@ public class EditarAtaWindow extends EditarWindow {
 		this.gridParticipantes.addColumn("Presente", String.class);
 		this.gridParticipantes.getColumns().get(2).setWidth(100);
 		this.gridParticipantes.setWidth("810px");
-		this.gridParticipantes.setHeight("360px");
+		this.gridParticipantes.setHeight("310px");
 		
 		this.vlGridParticipantes.removeAllComponents();
 		this.vlGridParticipantes.addComponent(this.gridParticipantes);
@@ -547,7 +547,7 @@ public class EditarAtaWindow extends EditarWindow {
 		this.gridPauta.getColumns().get(0).setWidth(100);
 		this.gridPauta.addColumn("Título", String.class);
 		this.gridPauta.setWidth("810px");
-		this.gridPauta.setHeight("235px");
+		this.gridPauta.setHeight("175px");
 		
 		this.vlGridPauta.removeAllComponents();
 		this.vlGridPauta.addComponent(this.gridPauta);

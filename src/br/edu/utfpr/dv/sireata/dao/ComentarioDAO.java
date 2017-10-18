@@ -1,5 +1,6 @@
 package br.edu.utfpr.dv.sireata.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,81 +14,136 @@ import br.edu.utfpr.dv.sireata.model.Comentario.SituacaoComentario;
 public class ComentarioDAO {
 	
 	public Comentario buscarPorId(int id) throws SQLException{
-		PreparedStatement stmt = ConnectionDAO.getInstance().getConnection().prepareStatement("SELECT * FROM comentarios WHERE idComentario = ?");
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		
-		stmt.setInt(1, id);
+		try{
+			conn = ConnectionDAO.getInstance().getConnection();
+			stmt = conn.prepareStatement("SELECT * FROM comentarios WHERE idComentario = ?");
 		
-		ResultSet rs = stmt.executeQuery();
-		
-		if(rs.next()){
-			return this.carregarObjeto(rs);
-		}else{
-			return null;
+			stmt.setInt(1, id);
+			
+			rs = stmt.executeQuery();
+			
+			if(rs.next()){
+				return this.carregarObjeto(rs);
+			}else{
+				return null;
+			}
+		}finally{
+			if((rs != null) && !rs.isClosed())
+				rs.close();
+			if((stmt != null) && !stmt.isClosed())
+				stmt.close();
+			if((conn != null) && !conn.isClosed())
+				conn.close();
 		}
 	}
 	
 	public Comentario buscarPorUsuario(int idUsuario, int idPauta) throws SQLException{
-		Statement stmt = ConnectionDAO.getInstance().getConnection().createStatement();
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		
-		ResultSet rs = stmt.executeQuery("SELECT comentarios.*, usuarios.nome AS nomeUsuario FROM comentarios " +
+		try{
+			conn = ConnectionDAO.getInstance().getConnection();
+			stmt = conn.createStatement();
+		
+			rs = stmt.executeQuery("SELECT comentarios.*, usuarios.nome AS nomeUsuario FROM comentarios " +
 				"INNER JOIN usuarios ON usuarios.idUsuario=comentarios.idUsuario " +
 				"WHERE comentarios.idPauta=" + String.valueOf(idPauta) + " AND comentarios.idUsuario=" + String.valueOf(idUsuario));
 		
-		if(rs.next()){
-			return this.carregarObjeto(rs);
-		}else{
-			return null;
+			if(rs.next()){
+				return this.carregarObjeto(rs);
+			}else{
+				return null;
+			}
+		}finally{
+			if((rs != null) && !rs.isClosed())
+				rs.close();
+			if((stmt != null) && !stmt.isClosed())
+				stmt.close();
+			if((conn != null) && !conn.isClosed())
+				conn.close();
 		}
 	}
 	
 	public List<Comentario> listarPorPauta(int idPauta) throws SQLException{
-		Statement stmt = ConnectionDAO.getInstance().getConnection().createStatement();
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
 		
-		ResultSet rs = stmt.executeQuery("SELECT comentarios.*, usuarios.nome AS nomeUsuario FROM comentarios " +
+		try{
+			conn = ConnectionDAO.getInstance().getConnection();
+			stmt = conn.createStatement();
+		
+			rs = stmt.executeQuery("SELECT comentarios.*, usuarios.nome AS nomeUsuario FROM comentarios " +
 				"INNER JOIN usuarios ON usuarios.idUsuario=comentarios.idUsuario " +
 				"WHERE comentarios.idPauta=" + String.valueOf(idPauta) + " ORDER BY usuarios.nome");
 		
-		List<Comentario> list = new ArrayList<Comentario>();
-		
-		while(rs.next()){
-			list.add(this.carregarObjeto(rs));
+			List<Comentario> list = new ArrayList<Comentario>();
+			
+			while(rs.next()){
+				list.add(this.carregarObjeto(rs));
+			}
+			
+			return list;
+		}finally{
+			if((rs != null) && !rs.isClosed())
+				rs.close();
+			if((stmt != null) && !stmt.isClosed())
+				stmt.close();
+			if((conn != null) && !conn.isClosed())
+				conn.close();
 		}
-		
-		return list;
 	}
 	
 	public int salvar(Comentario comentario) throws SQLException{
 		boolean insert = (comentario.getIdComentario() == 0);
-		PreparedStatement stmt;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
 		
-		if(insert){
-			stmt = ConnectionDAO.getInstance().getConnection().prepareStatement("INSERT INTO comentarios(idPauta, idUsuario, situacao, comentarios, situacaoComentarios, motivo) VALUES(?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-		}else{
-			stmt = ConnectionDAO.getInstance().getConnection().prepareStatement("UPDATE comentarios SET idPauta=?, idUsuario=?, situacao=?, comentarios=?, situacaoComentarios=?, motivo=? WHERE idComentario=?");
-		}
+		try{
+			conn = ConnectionDAO.getInstance().getConnection();
 		
-		stmt.setInt(1, comentario.getPauta().getIdPauta());
-		stmt.setInt(2, comentario.getUsuario().getIdUsuario());
-		stmt.setInt(3, comentario.getSituacao().getValue());
-		stmt.setString(4, comentario.getComentarios());
-		stmt.setInt(5, comentario.getSituacaoComentarios().getValue());
-		stmt.setString(6, comentario.getMotivo());
-		
-		if(!insert){
-			stmt.setInt(7, comentario.getIdComentario());
-		}
-		
-		stmt.execute();
-		
-		if(insert){
-			ResultSet rs = stmt.getGeneratedKeys();
-			
-			if(rs.next()){
-				comentario.setIdComentario(rs.getInt(1));
+			if(insert){
+				stmt = conn.prepareStatement("INSERT INTO comentarios(idPauta, idUsuario, situacao, comentarios, situacaoComentarios, motivo) VALUES(?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+			}else{
+				stmt = conn.prepareStatement("UPDATE comentarios SET idPauta=?, idUsuario=?, situacao=?, comentarios=?, situacaoComentarios=?, motivo=? WHERE idComentario=?");
 			}
+			
+			stmt.setInt(1, comentario.getPauta().getIdPauta());
+			stmt.setInt(2, comentario.getUsuario().getIdUsuario());
+			stmt.setInt(3, comentario.getSituacao().getValue());
+			stmt.setString(4, comentario.getComentarios());
+			stmt.setInt(5, comentario.getSituacaoComentarios().getValue());
+			stmt.setString(6, comentario.getMotivo());
+			
+			if(!insert){
+				stmt.setInt(7, comentario.getIdComentario());
+			}
+			
+			stmt.execute();
+			
+			if(insert){
+				rs = stmt.getGeneratedKeys();
+				
+				if(rs.next()){
+					comentario.setIdComentario(rs.getInt(1));
+				}
+			}
+			
+			return comentario.getIdComentario();
+		}finally{
+			if((rs != null) && !rs.isClosed())
+				rs.close();
+			if((stmt != null) && !stmt.isClosed())
+				stmt.close();
+			if((conn != null) && !conn.isClosed())
+				conn.close();
 		}
-		
-		return comentario.getIdComentario();
 	}
 	
 	private Comentario carregarObjeto(ResultSet rs) throws SQLException{

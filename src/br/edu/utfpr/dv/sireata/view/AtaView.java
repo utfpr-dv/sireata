@@ -81,6 +81,10 @@ public class AtaView extends ListView {
             }
         });
 		
+		this.cbCampus.setWidth("300px");
+		this.cbDepartamento.setWidth("300px");
+		this.cbOrgao.setWidth("300px");
+		
 		this.adicionarCampoFiltro(this.cbCampus);
 		this.adicionarCampoFiltro(this.cbDepartamento);
 		this.adicionarCampoFiltro(this.cbOrgao);

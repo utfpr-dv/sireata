@@ -25,7 +25,6 @@ import br.edu.utfpr.dv.sireata.component.ComboUsuario;
 import br.edu.utfpr.dv.sireata.model.Campus;
 import br.edu.utfpr.dv.sireata.model.Orgao;
 import br.edu.utfpr.dv.sireata.model.OrgaoMembro;
-import br.edu.utfpr.dv.sireata.model.Usuario;
 import br.edu.utfpr.dv.sireata.view.ListView;
 
 public class EditarOrgaoWindow extends EditarWindow {
@@ -41,6 +40,7 @@ public class EditarOrgaoWindow extends EditarWindow {
 	private final ComboUsuario cbPresidente;
 	private final ComboUsuario cbSecretario;
 	private final CheckBox cbAtivo;
+	private final TextField tfLinkAtas;
 	private final Button btAdicionarMembro;
 	private final Button btEditarMembro;
 	private final Button btRemoverMembro;
@@ -86,6 +86,11 @@ public class EditarOrgaoWindow extends EditarWindow {
 		
 		this.cbAtivo = new CheckBox("Ativo");
 		
+		this.tfLinkAtas = new TextField("Link para acesso às atas publicadas");
+		this.tfLinkAtas.setValue("http://coensapp.dv.utfpr.edu.br/sireata/#!ataspublicadas/" + String.valueOf(orgao.getIdOrgao()));
+		this.tfLinkAtas.setReadOnly(true);
+		this.tfLinkAtas.setWidth("810px");
+		
 		HorizontalLayout h1 = new HorizontalLayout(this.cbCampus, this.cbDepartamento);
 		h1.setSpacing(true);
 		
@@ -94,6 +99,10 @@ public class EditarOrgaoWindow extends EditarWindow {
 		
 		VerticalLayout tab1 = new VerticalLayout(h1, this.tfNome, this.tfNomeCompleto, this.tfDesignacaoPresidente, h2, this.cbAtivo);
 		tab1.setSpacing(true);
+		
+		if(orgao.getIdOrgao() > 0){
+			tab1.addComponent(this.tfLinkAtas);
+		}
 		
 		this.tab = new TabSheet();
 		this.tab.setWidth("820px");
@@ -176,7 +185,7 @@ public class EditarOrgaoWindow extends EditarWindow {
 		this.gridMembros.addColumn("Nome", String.class);
 		this.gridMembros.addColumn("Designação", String.class);
 		this.gridMembros.setWidth("810px");
-		this.gridMembros.setHeight("190px");
+		this.gridMembros.setHeight("350px");
 		
 		this.vlGrid.removeAllComponents();
 		this.vlGrid.addComponent(this.gridMembros);
@@ -229,8 +238,9 @@ public class EditarOrgaoWindow extends EditarWindow {
 		
 		if(!encontrou){
 			this.orgao.getMembros().add(membro);
-			this.carregarMembros();
 		}
+		
+		this.carregarMembros();
 	}
 	
 	private void editarMembro(){
