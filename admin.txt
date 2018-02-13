@@ -1,2 +1,0 @@
-Login: admin
-Senha: S0ftw@reEng1neer1ng
