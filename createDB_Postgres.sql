@@ -128,6 +128,17 @@ CREATE TABLE ataparticipantes (
 CREATE INDEX fk_ataparticipantes_ata_idx ON ataparticipantes (idata);
 CREATE INDEX fk_ataparticipantes_usuario_idx ON ataparticipantes (idusuario);
 
+CREATE TABLE anexos (
+    idanexo SERIAL NOT NULL,
+    idata INT NOT NULL,
+    descricao VARCHAR(50) NOT NULL,
+    ordem SMALLINT NOT NULL,
+    arquivo BYTEA NOT NULL,
+    PRIMARY KEY (idanexo),
+	CONSTRAINT fk_anexos_ata FOREIGN KEY (idata) REFERENCES atas (idata) ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+CREATE INDEX fk_anexos_ata_idx ON anexos (idata);
+
 CREATE TABLE comentarios (
 	idcomentario SERIAL NOT NULL,
 	idpauta INT NOT NULL,

@@ -46,9 +46,9 @@ public class AtaPublicadaView extends CustomComponent implements View {
 			
 			List<Ata> atas = new AtaBO().listarPorOrgao(idOrgao);
 			
-			this.layout.addComponent(new Label("Órgão: " + orgao.getNome()));
-			this.layout.addComponent(new Label("Departamento/Coordenação: " + departamento.getNome()));
 			this.layout.addComponent(new Label("Câmpus: " + campus.getNome()));
+			this.layout.addComponent(new Label("Departamento/Coordenação: " + departamento.getNome()));
+			this.layout.addComponent(new Label("Órgão: " + orgao.getNome()));
 			
 			for(Ata ata : atas){
 				String data = new SimpleDateFormat("dd/MM/yyyy").format(ata.getData());

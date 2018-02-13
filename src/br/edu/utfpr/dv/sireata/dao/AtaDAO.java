@@ -447,7 +447,7 @@ public class AtaDAO {
 			stmt.setDate(9, new java.sql.Date(ata.getDataLimiteComentarios().getTime()));
 			stmt.setString(10, ata.getConsideracoesIniciais());
 			if(ata.getAudio() == null){
-				stmt.setNull(11, Types.BLOB);
+				stmt.setNull(11, Types.BINARY);
 			}else{
 				stmt.setBytes(11, ata.getAudio());	
 			}

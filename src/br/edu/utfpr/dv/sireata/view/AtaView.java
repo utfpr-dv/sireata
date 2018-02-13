@@ -261,13 +261,10 @@ public class AtaView extends ListView {
 			}
     		
     		try {
-    			List<AtaReport> list = new ArrayList<AtaReport>();
-				AtaBO bo = new AtaBO();
-				AtaReport report = bo.gerarAtaReport((int)value);
+    			AtaBO bo = new AtaBO();
+				byte[] report = bo.gerarAta((int)value);
 				
-				list.add(report);
-				
-				new ReportUtils().prepareForPdfReport("Ata", "Ata", list, this.btPrevia);
+				new ExtensionUtils().extendToDownload("Ata.pdf", report, this.btPrevia);
         	} catch (Exception e) {
         		this.listenerClickPrevia = new Button.ClickListener() {
 		            @Override

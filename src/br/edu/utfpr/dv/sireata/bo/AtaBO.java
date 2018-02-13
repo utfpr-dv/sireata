@@ -1,5 +1,6 @@
 package br.edu.utfpr.dv.sireata.bo;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -9,12 +10,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
 
+import br.edu.utfpr.dv.sireata.dao.AnexoDAO;
 import br.edu.utfpr.dv.sireata.dao.AtaDAO;
 import br.edu.utfpr.dv.sireata.dao.AtaParticipanteDAO;
-import br.edu.utfpr.dv.sireata.dao.ConnectionDAO;
 import br.edu.utfpr.dv.sireata.dao.OrgaoDAO;
 import br.edu.utfpr.dv.sireata.dao.PautaDAO;
+import br.edu.utfpr.dv.sireata.model.Anexo;
 import br.edu.utfpr.dv.sireata.model.Ata;
 import br.edu.utfpr.dv.sireata.model.Pauta;
 import br.edu.utfpr.dv.sireata.util.DateUtils;
@@ -186,8 +189,6 @@ public class AtaBO {
 	
 	public int salvar(Ata ata) throws Exception{
 		try{
-			ConnectionDAO.getInstance().getConnection().setAutoCommit(false);
-			
 			AtaDAO dao = new AtaDAO();
 			
 			int id = dao.salvar(ata);
@@ -214,17 +215,24 @@ public class AtaBO {
 				}
 			}
 			
-			ConnectionDAO.getInstance().getConnection().commit();
+			if(ata.getAnexos() != null) {
+				int i = 1;
+				
+				for(Anexo a : ata.getAnexos()) {
+					AnexoDAO adao = new AnexoDAO();
+					
+					a.getAta().setIdAta(id);
+					a.setOrdem(i);
+					adao.salvar(a);
+					i++;
+				}
+			}
 			
 			return id;
 		}catch(Exception e){
-			ConnectionDAO.getInstance().getConnection().rollback();
-			
 			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
 			
 			throw new Exception(e.getMessage());
-		}finally{
-			ConnectionDAO.getInstance().getConnection().setAutoCommit(true);
 		}
 	}
 	
@@ -314,7 +322,7 @@ public class AtaBO {
 					" reunião " + (ata.getTipo() == TipoAta.ORDINARIA ? "ordinária" : "extraordinária") +
 					" de " + String.valueOf(DateUtils.getYear(ata.getData())) + " do(a) " +
 					StringEscapeUtils.escapeHtml4(orgao.getNomeCompleto()) + ", a qual foi conduzida pelo(a) " + 
-					StringEscapeUtils.escapeHtml4(orgao.getDesignacaoPresidente()) + " " +
+					(ata.getPresidente().getIdUsuario() == orgao.getPresidente().getIdUsuario() ? StringEscapeUtils.escapeHtml4(orgao.getDesignacaoPresidente()) + " " : "professor(a) ") +
 					StringEscapeUtils.escapeHtml4(ata.getPresidente().getNome()) + " e teve como pauta: <b>";
 			
 			ata.setPauta(pbo.listarPorAta(idAta));
@@ -383,7 +391,26 @@ public class AtaBO {
 			
 			ByteArrayOutputStream pdf = new ReportUtils().createPdfStream(list, "Ata");
 			
-			return pdf.toByteArray();
+			AnexoBO bo = new AnexoBO();
+			List<Anexo> anexos = bo.listarPorAta(idAta);
+			
+			if(anexos.size() > 0) {
+				ByteArrayOutputStream output = new ByteArrayOutputStream();
+				PDFMergerUtility pdfMerge = new PDFMergerUtility();
+				
+				pdfMerge.setDestinationStream(output);
+				
+				pdfMerge.addSource(new ByteArrayInputStream(pdf.toByteArray()));
+				for(Anexo a : anexos){
+					pdfMerge.addSource(new ByteArrayInputStream(a.getArquivo()));
+				}
+				
+				pdfMerge.mergeDocuments(null);
+				
+				return output.toByteArray();	
+			} else {
+				return pdf.toByteArray();				
+			}
 		}catch(Exception e){
 			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
 			

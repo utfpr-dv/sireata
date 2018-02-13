@@ -181,7 +181,7 @@ public class CampusDAO {
 			stmt.setString(1, campus.getNome());
 			stmt.setString(2, campus.getEndereco());
 			if(campus.getLogo() == null){
-				stmt.setNull(3, Types.BLOB);
+				stmt.setNull(3, Types.BINARY);
 			}else{
 				stmt.setBytes(3, campus.getLogo());	
 			}

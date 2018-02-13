@@ -220,7 +220,7 @@ public class DepartamentoDAO {
 			stmt.setInt(1, departamento.getCampus().getIdCampus());
 			stmt.setString(2, departamento.getNome());
 			if(departamento.getLogo() == null){
-				stmt.setNull(3, Types.BLOB);
+				stmt.setNull(3, Types.BINARY);
 			}else{
 				stmt.setBytes(3, departamento.getLogo());	
 			}

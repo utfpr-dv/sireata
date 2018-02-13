@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.naming.CommunicationException;
+
 import br.edu.utfpr.dv.sireata.dao.UsuarioDAO;
 import br.edu.utfpr.dv.sireata.ldap.LdapConfig;
 import br.edu.utfpr.dv.sireata.ldap.LdapUtils;
@@ -170,22 +172,32 @@ public class UsuarioBO {
 					LdapConfig.getInstance().getUidField());
 			
 			try{
-				ldapUtils.authenticate(login, senha);
-				
-				Map<String, String> dataLdap = ldapUtils.getLdapProperties(login);
-
-				//String cnpjCpf = dataLdap.get(LdapConfig.getInstance().getCpfField());
-				//String matricula = dataLdap.get(LdapConfig.getInstance().getRegisterField());
-				String nome = this.formatarNome(dataLdap.get(LdapConfig.getInstance().getNameField()));
-				String email = dataLdap.get(LdapConfig.getInstance().getEmailField());
-				
-				usuario.setSenha(hash);
-				
-				if(usuario.getIdUsuario() == 0){
-					usuario.setNome(nome);
-					usuario.setEmail(email);
-					usuario.setLogin(login);
-					usuario.setExterno(false);
+				try {
+					ldapUtils.authenticate(login, senha);
+					
+					Map<String, String> dataLdap = ldapUtils.getLdapProperties(login);
+	
+					//String cnpjCpf = dataLdap.get(LdapConfig.getInstance().getCpfField());
+					//String matricula = dataLdap.get(LdapConfig.getInstance().getRegisterField());
+					String nome = this.formatarNome(dataLdap.get(LdapConfig.getInstance().getNameField()));
+					String email = dataLdap.get(LdapConfig.getInstance().getEmailField());
+					
+					usuario.setSenha(hash);
+					
+					if(usuario.getIdUsuario() == 0){
+						usuario.setNome(nome);
+						usuario.setEmail(email);
+						usuario.setLogin(login);
+						usuario.setExterno(false);
+					}
+				} catch (CommunicationException e) {
+					if(usuario.getIdUsuario() == 0) {
+						throw new Exception("Não foi possível conectar ao servicor LDAP.");
+					} else {
+						if(!usuario.getSenha().equals(hash)){
+							throw new Exception("Usuário ou senha inválidos.");
+						}
+					}
 				}
 				
 				this.salvar(usuario);

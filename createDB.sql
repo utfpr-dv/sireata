@@ -128,6 +128,17 @@ CREATE TABLE `ataparticipantes` (
 	CONSTRAINT `fk_ataparticipantes_usuario` FOREIGN KEY (`idusuario`) REFERENCES `usuarios` (`idusuario`) ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 
+CREATE TABLE `anexos` (
+    `idanexo` INT NOT NULL AUTO_INCREMENT,
+    `idata` INT NOT NULL,
+    `descricao` VARCHAR(50) NOT NULL,
+    `ordem` SMALLINT NOT NULL,
+    `arquivo` mediumblob NOT NULL,
+    PRIMARY KEY (idanexo),
+	CONSTRAINT `fk_anexos_ata` FOREIGN KEY (`idata`) REFERENCES `atas` (`idata`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+	KEY `fk_anexos_ata_idx` (`idata`)
+);
+
 CREATE TABLE `comentarios` (
 	`idcomentario` int(11) NOT NULL AUTO_INCREMENT,
 	`idpauta` int(11) NOT NULL,

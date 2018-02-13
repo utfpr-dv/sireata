@@ -9,6 +9,8 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.event.SelectionEvent;
+import com.vaadin.event.SelectionEvent.SelectionListener;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.DateField;
@@ -24,6 +26,7 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
 
 import br.edu.utfpr.dv.sireata.Session;
+import br.edu.utfpr.dv.sireata.bo.AnexoBO;
 import br.edu.utfpr.dv.sireata.bo.AtaBO;
 import br.edu.utfpr.dv.sireata.bo.AtaParticipanteBO;
 import br.edu.utfpr.dv.sireata.bo.CampusBO;
@@ -35,6 +38,7 @@ import br.edu.utfpr.dv.sireata.component.ComboDepartamento;
 import br.edu.utfpr.dv.sireata.component.ComboOrgao;
 import br.edu.utfpr.dv.sireata.component.ComboUsuario;
 import br.edu.utfpr.dv.sireata.component.ComboCampus.TipoFiltro;
+import br.edu.utfpr.dv.sireata.model.Anexo;
 import br.edu.utfpr.dv.sireata.model.Ata;
 import br.edu.utfpr.dv.sireata.model.Campus;
 import br.edu.utfpr.dv.sireata.model.Departamento;
@@ -46,6 +50,7 @@ import br.edu.utfpr.dv.sireata.model.AtaParticipante;
 import br.edu.utfpr.dv.sireata.model.AtaReport;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 import br.edu.utfpr.dv.sireata.util.DateUtils;
+import br.edu.utfpr.dv.sireata.util.ExtensionUtils;
 import br.edu.utfpr.dv.sireata.util.ReportUtils;
 import br.edu.utfpr.dv.sireata.view.ListView;
 
@@ -82,9 +87,19 @@ public class EditarAtaWindow extends EditarWindow {
 	private final Button btVisualizar;
 	private final Button btPublicar;
 	private Grid gridParticipantes;
+	private final VerticalLayout vlGridAnexos;
+	private Grid gridAnexos;
+	private final Button btAdicionarAnexo;
+	private final Button btVisualizarAnexo;
+	private Button.ClickListener listenerClickVisualizarAnexo;
+	private final Button btEditarAnexo;
+	private final Button btRemoverAnexo;
+	private final Button btMoverAnexoAcima;
+	private final Button btMoverAnexoAbaixo;
 	
 	private int indexParticipante = -1;
 	private int indexPauta = -1;
+	private int indexAnexo = -1;
 	
 	public EditarAtaWindow(Ata ata, ListView parentView){
 		super("Editar Ata", parentView);
@@ -293,6 +308,60 @@ public class EditarAtaWindow extends EditarWindow {
 		
 		this.adicionarCampo(this.tab);
 		
+		this.vlGridAnexos = new VerticalLayout();
+		this.vlGridAnexos.setSpacing(true);
+		
+		this.btVisualizarAnexo = new Button("Visualizar");
+		this.btVisualizarAnexo.setWidth("125px");
+		
+		this.btAdicionarAnexo = new Button("Adicionar", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	adicionarAnexo();
+            }
+        });
+		this.btAdicionarAnexo.setWidth("125px");
+		
+		this.btEditarAnexo = new Button("Editar", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	editarAnexo();
+            }
+        });
+		this.btEditarAnexo.setWidth("125px");
+		
+		this.btRemoverAnexo = new Button("Remover", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	removerAnexo();
+            }
+        });
+		this.btRemoverAnexo.setWidth("125px");
+		
+		this.btMoverAnexoAcima = new Button("Para Cima", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	moverAnexoAcima();
+            }
+        });
+		this.btMoverAnexoAcima.setWidth("125px");
+		
+		this.btMoverAnexoAbaixo = new Button("Para Baixo", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	moverAnexoAbaixo();
+            }
+        });
+		this.btMoverAnexoAbaixo.setWidth("125px");
+		
+		HorizontalLayout h7 = new HorizontalLayout(this.btVisualizarAnexo, this.btAdicionarAnexo, this.btEditarAnexo, this.btRemoverAnexo, this.btMoverAnexoAcima, this.btMoverAnexoAbaixo);
+		h7.setSpacing(true);
+		
+		VerticalLayout tab4 = new VerticalLayout(this.vlGridAnexos, h7);
+		tab4.setSpacing(true);
+		
+		this.tab.addTab(tab4, "Anexos");
+		
 		this.btLiberarComentarios = new Button("Liberar Comentários", new Button.ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
@@ -362,9 +431,11 @@ public class EditarAtaWindow extends EditarWindow {
 		
 		this.ata.setParticipantes(null);
 		this.ata.setPauta(null);
+		this.ata.setAnexos(null);
 		
 		this.carregarParticipantes();
 		this.carregaPauta();
+		this.carregarAnexos();
 		
 		if(this.ata.getIdAta() == 0){
 			carregarNumeroAta();
@@ -526,6 +597,79 @@ public class EditarAtaWindow extends EditarWindow {
 		}
 	}
 	
+	private void carregarAnexos(){
+		this.gridAnexos = new Grid();
+		this.gridAnexos.addColumn("Ordem", String.class);
+		this.gridAnexos.addColumn("Descrição", String.class);
+		this.gridAnexos.getColumns().get(0).setWidth(200);
+		this.gridAnexos.setWidth("810px");
+		this.gridAnexos.setHeight("310px");
+		this.gridAnexos.addSelectionListener(new SelectionListener() {
+			@Override
+			public void select(SelectionEvent event) {
+				prepareDownloadAnexo();
+			}
+		});
+		
+		this.vlGridAnexos.removeAllComponents();
+		this.vlGridAnexos.addComponent(this.gridAnexos);
+		
+		if(this.ata.getAnexos() == null){
+			if(this.ata.getIdAta() == 0){
+				this.ata.setAnexos(new ArrayList<Anexo>());
+			}else{
+				try {
+					AnexoBO bo = new AnexoBO();
+					
+					this.ata.setAnexos(bo.listarPorAta(this.ata.getIdAta()));
+				} catch (Exception e) {
+					Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+					
+					Notification.show("Anexos", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+				}
+			}
+		}
+		
+		int i = 1;
+		for(Anexo a : this.ata.getAnexos()){
+			this.gridAnexos.addRow("Anexo " + String.valueOf(i), a.getDescricao());
+			i++;
+		}
+	}
+	
+	private void prepareDownloadAnexo() {
+		int index = this.getIndexAnexoSelecionado();
+		
+		this.btVisualizarAnexo.removeClickListener(this.listenerClickVisualizarAnexo);
+		new ExtensionUtils().removeAllExtensions(this.btVisualizarAnexo);
+		
+		if(index < 0) {
+			this.listenerClickVisualizarAnexo = new Button.ClickListener() {
+	            @Override
+	            public void buttonClick(ClickEvent event) {
+	            	Notification.show("Visualizar Anexo", "Selecione o anexo para visualizar.", Notification.Type.WARNING_MESSAGE);
+	            }
+	        };
+	        
+    		this.btVisualizarAnexo.addClickListener(this.listenerClickVisualizarAnexo);
+		} else {
+			try {
+				new ExtensionUtils().extendToDownload("Anexo" + String.valueOf(index + 1) + ".pdf", this.ata.getAnexos().get(index).getArquivo(), this.btVisualizarAnexo);
+			} catch (Exception e) {
+				this.listenerClickVisualizarAnexo = new Button.ClickListener() {
+		            @Override
+		            public void buttonClick(ClickEvent event) {
+		            	Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+		            	
+		            	Notification.show("Visualizar Anexo", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+		            }
+		        };
+		        
+        		this.btVisualizarAnexo.addClickListener(this.listenerClickVisualizarAnexo);
+			}
+		}
+	}
+	
 	private void carregarPresidenteSecretario(){
 		try {
 			OrgaoBO bo = new OrgaoBO();
@@ -660,6 +804,108 @@ public class EditarAtaWindow extends EditarWindow {
 		}
 		
 		this.carregarParticipantes();
+	}
+	
+	private void adicionarAnexo(){
+		Anexo anexo = new Anexo();
+		
+		anexo.setAta(this.ata);
+		
+		this.indexAnexo = -1;
+		
+		UI.getCurrent().addWindow(new EditarAnexoWindow(anexo, this));
+	}
+	
+	private void editarAnexo(){
+		this.indexAnexo = this.getIndexAnexoSelecionado();
+		
+		if(this.indexAnexo == -1){
+			Notification.show("Editar Anexo", "Selecione o anexo para editar.", Notification.Type.WARNING_MESSAGE);
+		}else{
+			UI.getCurrent().addWindow(new EditarAnexoWindow(this.ata.getAnexos().get(this.indexAnexo), this));
+		}
+	}
+	
+	private void removerAnexo(){
+		int index = this.getIndexAnexoSelecionado();
+		
+		if(index == -1){
+    		Notification.show("Remover Anexo", "Selecione o anexo para remover.", Notification.Type.WARNING_MESSAGE);
+    	}else{
+    		ConfirmDialog.show(UI.getCurrent(), "Confirma a exclusão do registro?", new ConfirmDialog.Listener() {
+                public void onClose(ConfirmDialog dialog) {
+                    if (dialog.isConfirmed()) {
+                    	try {
+                    		Anexo anexo = ata.getAnexos().get(index);
+                    		
+                			if(anexo.getIdAnexo() > 0){
+	                			AnexoBO bo = new AnexoBO();
+	                			
+								bo.excluir(anexo);
+                			}
+                        	
+                        	ata.getAnexos().remove(index);
+                        	
+                        	carregarAnexos();
+						} catch (Exception e) {
+							Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+							
+							Notification.show("Remover Anexo", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+						}
+                    }
+                }
+            });
+    	}
+	}
+	
+	private void moverAnexoAcima() {
+		int index = this.getIndexAnexoSelecionado();
+		
+		if(index == -1){
+    		Notification.show("Mover Anexo", "Selecione o anexo para mover.", Notification.Type.WARNING_MESSAGE);
+    	}else if(index > 0){
+			Anexo a = this.ata.getAnexos().get(index);
+			
+			this.ata.getAnexos().set(index, this.ata.getAnexos().get(index - 1));
+			this.ata.getAnexos().set(index - 1, a);
+			
+			this.carregarAnexos();
+		}
+	}
+	
+	private void moverAnexoAbaixo() {
+		int index = this.getIndexAnexoSelecionado();
+		
+		if(index == -1){
+    		Notification.show("Mover Anexo", "Selecione o anexo para mover.", Notification.Type.WARNING_MESSAGE);
+    	}else if(index < this.ata.getAnexos().size() - 1){
+    		Anexo a = this.ata.getAnexos().get(index);
+			
+			this.ata.getAnexos().set(index, this.ata.getAnexos().get(index + 1));
+			this.ata.getAnexos().set(index + 1, a);
+			
+			this.carregarAnexos();
+		}
+	}
+	
+	private int getIndexAnexoSelecionado(){
+    	Object itemId = this.gridAnexos.getSelectedRow();
+
+    	if(itemId == null){
+    		return -1;
+    	}else{
+    		return ((int)itemId) - 1;	
+    	}
+    }
+	
+	public void atualizarAnexo(Anexo anexo){
+		if(this.indexAnexo == -1){
+			this.ata.getAnexos().add(anexo);
+		}else{
+			this.ata.getAnexos().set(this.indexAnexo, anexo);
+		}
+		
+		this.carregarAnexos();
 	}
 	
 	private void adicionarPauta(){
