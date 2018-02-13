@@ -19,6 +19,7 @@ import br.edu.utfpr.dv.sireata.view.DepartamentoView;
 import br.edu.utfpr.dv.sireata.view.LoginView;
 import br.edu.utfpr.dv.sireata.view.MainView;
 import br.edu.utfpr.dv.sireata.view.OrgaoView;
+import br.edu.utfpr.dv.sireata.view.PDFView;
 import br.edu.utfpr.dv.sireata.view.UsuarioView;
 
 @SuppressWarnings("serial")
@@ -46,6 +47,7 @@ public class SireataUI extends UI {
         getNavigator().addView(UsuarioView.NAME, UsuarioView.class);
         getNavigator().addView(AtaView.NAME, AtaView.class);
         getNavigator().addView(AtaPublicadaView.NAME, AtaPublicadaView.class);
+        getNavigator().addView(PDFView.NAME, PDFView.class);
         
         //
         // We use a view change handler to ensure the user is always redirected

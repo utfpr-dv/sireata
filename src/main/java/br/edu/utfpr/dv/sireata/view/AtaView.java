@@ -1,7 +1,6 @@
 package br.edu.utfpr.dv.sireata.view;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -11,8 +10,6 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.event.SelectionEvent;
-import com.vaadin.event.SelectionEvent.SelectionListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
@@ -27,10 +24,7 @@ import br.edu.utfpr.dv.sireata.component.ComboCampus.TipoFiltro;
 import br.edu.utfpr.dv.sireata.component.ComboDepartamento;
 import br.edu.utfpr.dv.sireata.component.ComboOrgao;
 import br.edu.utfpr.dv.sireata.model.Ata;
-import br.edu.utfpr.dv.sireata.model.AtaReport;
 import br.edu.utfpr.dv.sireata.util.DateUtils;
-import br.edu.utfpr.dv.sireata.util.ExtensionUtils;
-import br.edu.utfpr.dv.sireata.util.ReportUtils;
 import br.edu.utfpr.dv.sireata.window.EditarAtaWindow;
 
 public class AtaView extends ListView {
@@ -43,9 +37,6 @@ public class AtaView extends ListView {
 	private final Button btVisualizar;
 	private final Button btPrevia;
 	private final Button btPublicar;
-	
-	private Button.ClickListener listenerClickVisualizar;
-	private Button.ClickListener listenerClickPrevia;
 	
 	private int tipo;
 	
@@ -70,9 +61,19 @@ public class AtaView extends ListView {
 			}
 		});
 		
-		this.btVisualizar = new Button("Visualizar");
+		this.btVisualizar = new Button("Visualizar", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	visualizarAta();
+            }
+        });
 		
-		this.btPrevia = new Button("Prévia");
+		this.btPrevia = new Button("Prévia", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	visualizarPrevia();
+            }
+        });
 		
 		this.btPublicar = new Button("Publicar", new Button.ClickListener() {
             @Override
@@ -96,6 +97,43 @@ public class AtaView extends ListView {
 		this.setBotaoExcluirVisivel(false);
 		this.setBotaoAdicionarVisivel(false);
 	}
+	
+	private void visualizarAta() {
+		Object id = this.getIdSelecionado();
+		
+		if(id == null) {
+			Notification.show("Visualizar Ata", "Selecione uma ata para visualizar.", Notification.Type.WARNING_MESSAGE);
+		} else {
+			try {
+				AtaBO bo = new AtaBO();
+				Ata ata = bo.buscarPorId((int)id);
+				
+				this.showReport(ata.getDocumento());
+			} catch(Exception e) {
+				Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+				
+				Notification.show("Visualizar Ata", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+			}
+		}
+	}
+	
+	private void visualizarPrevia() {
+		Object id = this.getIdSelecionado();
+		
+		if(id == null) {
+			Notification.show("Prévia da Ata", "Selecione uma ata para visualizar a prévia.", Notification.Type.WARNING_MESSAGE);
+		} else {
+			try {
+				AtaBO bo = new AtaBO();
+				
+				this.showReport(bo.gerarAta(bo.buscarPorId((int)id)));
+			} catch(Exception e) {
+				Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+				
+				Notification.show("Prévia da Ata", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+			}
+		}
+	}
 
 	@Override
 	protected void carregarGrid() {
@@ -108,12 +146,6 @@ public class AtaView extends ListView {
 		this.getGrid().getColumns().get(1).setWidth(150);
 		this.getGrid().getColumns().get(2).setWidth(100);
 		this.getGrid().getColumns().get(3).setWidth(130);
-		this.getGrid().addSelectionListener(new SelectionListener() {
-			@Override
-			public void select(SelectionEvent event) {
-				prepareDownload();
-			}
-		});
 		
 		try {
 			AtaBO bo = new AtaBO();
@@ -232,70 +264,4 @@ public class AtaView extends ListView {
 		this.atualizarGrid();
 	}
 	
-	private void prepareDownload(){
-    	Object value = this.getIdSelecionado();
-    	
-    	this.btVisualizar.removeClickListener(this.listenerClickVisualizar);
-    	new ExtensionUtils().removeAllExtensions(this.btVisualizar);
-    	
-    	this.btPrevia.removeClickListener(this.listenerClickPrevia);
-    	new ExtensionUtils().removeAllExtensions(this.btPrevia);
-    	
-    	if(value != null){
-    		try {
-    			AtaBO bo = new AtaBO();
-            	Ata ata = bo.buscarPorId((int)value);
-            	
-            	new ExtensionUtils().extendToDownload(ata.getNome() + ".pdf", ata.getDocumento(), this.btVisualizar);
-        	} catch (Exception e) {
-        		this.listenerClickVisualizar = new Button.ClickListener() {
-		            @Override
-		            public void buttonClick(ClickEvent event) {
-		            	Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
-		            	
-		            	Notification.show("Visualizar Ata", e.getMessage(), Notification.Type.ERROR_MESSAGE);
-		            }
-		        };
-		        
-        		this.btVisualizar.addClickListener(this.listenerClickVisualizar);
-			}
-    		
-    		try {
-    			AtaBO bo = new AtaBO();
-				byte[] report = bo.gerarAta((int)value);
-				
-				new ExtensionUtils().extendToDownload("Ata.pdf", report, this.btPrevia);
-        	} catch (Exception e) {
-        		this.listenerClickPrevia = new Button.ClickListener() {
-		            @Override
-		            public void buttonClick(ClickEvent event) {
-		            	Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
-		            	
-		            	Notification.show("Prévia da Ata", e.getMessage(), Notification.Type.ERROR_MESSAGE);
-		            }
-		        };
-		        
-        		this.btPrevia.addClickListener(this.listenerClickPrevia);
-			}
-    	}else{
-    		this.listenerClickVisualizar = new Button.ClickListener() {
-	            @Override
-	            public void buttonClick(ClickEvent event) {
-	            	Notification.show("Visualizar Ata", "Selecione a ata para visualizar.", Notification.Type.WARNING_MESSAGE);
-	            }
-	        };
-	        
-    		this.btVisualizar.addClickListener(this.listenerClickVisualizar);
-    		
-    		this.listenerClickPrevia = new Button.ClickListener() {
-	            @Override
-	            public void buttonClick(ClickEvent event) {
-	            	Notification.show("Prévia da Ata", "Selecione a ata para visualizar a prévia do documento.", Notification.Type.WARNING_MESSAGE);
-	            }
-	        };
-	        
-	        this.btPrevia.addClickListener(this.listenerClickPrevia);
-    	}
-    }
-
 }

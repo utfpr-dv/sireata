@@ -1,9 +1,13 @@
 package br.edu.utfpr.dv.sireata.window;
 
+import java.util.UUID;
+
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Window;
 
+import br.edu.utfpr.dv.sireata.Session;
 import br.edu.utfpr.dv.sireata.view.ListView;
+import br.edu.utfpr.dv.sireata.view.PDFView;
 
 import com.vaadin.ui.Button.ClickEvent;
 
@@ -84,6 +88,14 @@ public abstract class EditarWindow extends Window {
 		c.setWidth("150px");
 		this.hlBotoes.addComponent(c);
 	}
+	
+	protected void showReport(byte[] pdfReport){
+    	String id = UUID.randomUUID().toString();
+    	
+    	Session.putReport(pdfReport, id);
+		
+		getUI().getPage().open("#!" + PDFView.NAME + "/session/" + id, "_blank");
+    }
 	
 	public abstract void salvar();
 	

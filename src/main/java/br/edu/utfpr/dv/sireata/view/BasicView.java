@@ -1,5 +1,7 @@
 package br.edu.utfpr.dv.sireata.view;
 
+import java.util.UUID;
+
 import com.vaadin.navigator.View;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.ComponentContainer;
@@ -10,6 +12,7 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 
+import br.edu.utfpr.dv.sireata.Session;
 import br.edu.utfpr.dv.sireata.component.SideMenu;
 
 public abstract class BasicView extends CustomComponent implements View {
@@ -68,5 +71,13 @@ public abstract class BasicView extends CustomComponent implements View {
 		this.content.removeAllComponents();
 		this.content.addComponent(component);
 	}
+	
+	protected void showReport(byte[] pdfReport){
+    	String id = UUID.randomUUID().toString();
+    	
+    	Session.putReport(pdfReport, id);
+		
+		getUI().getPage().open("#!" + PDFView.NAME + "/session/" + id, "_blank");
+    }
 
 }

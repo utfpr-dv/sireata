@@ -26,4 +26,16 @@ public class Session {
 		return Session.getUsuario().isAdministrador();
 	}
 	
+	public static void putReport(byte[] report, String id){
+		VaadinSession.getCurrent().setAttribute(id, report);
+	}
+	
+	public static byte[] getReport(String id){
+		byte[] report = (byte[]) VaadinSession.getCurrent().getAttribute(id);
+		
+		VaadinSession.getCurrent().setAttribute(id, null);
+		
+		return report;
+	}
+	
 }

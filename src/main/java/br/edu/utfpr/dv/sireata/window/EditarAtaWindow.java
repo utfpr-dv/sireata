@@ -9,8 +9,6 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
-import com.vaadin.event.SelectionEvent;
-import com.vaadin.event.SelectionEvent.SelectionListener;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.DateField;
@@ -50,8 +48,6 @@ import br.edu.utfpr.dv.sireata.model.AtaParticipante;
 import br.edu.utfpr.dv.sireata.model.AtaReport;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 import br.edu.utfpr.dv.sireata.util.DateUtils;
-import br.edu.utfpr.dv.sireata.util.ExtensionUtils;
-import br.edu.utfpr.dv.sireata.util.ReportUtils;
 import br.edu.utfpr.dv.sireata.view.ListView;
 
 public class EditarAtaWindow extends EditarWindow {
@@ -91,7 +87,6 @@ public class EditarAtaWindow extends EditarWindow {
 	private Grid gridAnexos;
 	private final Button btAdicionarAnexo;
 	private final Button btVisualizarAnexo;
-	private Button.ClickListener listenerClickVisualizarAnexo;
 	private final Button btEditarAnexo;
 	private final Button btRemoverAnexo;
 	private final Button btMoverAnexoAcima;
@@ -311,7 +306,12 @@ public class EditarAtaWindow extends EditarWindow {
 		this.vlGridAnexos = new VerticalLayout();
 		this.vlGridAnexos.setSpacing(true);
 		
-		this.btVisualizarAnexo = new Button("Visualizar");
+		this.btVisualizarAnexo = new Button("Visualizar", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	visualizarAnexo();
+            }
+        });
 		this.btVisualizarAnexo.setWidth("125px");
 		
 		this.btAdicionarAnexo = new Button("Adicionar", new Button.ClickListener() {
@@ -383,7 +383,12 @@ public class EditarAtaWindow extends EditarWindow {
             }
         });
 		
-		this.btVisualizar = new Button("Visualizar Ata");
+		this.btVisualizar = new Button("Visualizar Ata", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	visualizarAta();
+            }
+        });
 		
 		this.adicionarBotao(this.btLiberarComentarios);
 		this.adicionarBotao(this.btBloquearComentarios);
@@ -471,12 +476,6 @@ public class EditarAtaWindow extends EditarWindow {
 					this.setBotaoSalvarVisivel(false);
 					this.btEditarPauta.setCaption("Visualizar Item");
 				}
-				
-				AtaReport report = bo.gerarAtaReport(this.ata);
-				
-				list.add(report);
-				
-				new ReportUtils().prepareForPdfReport("Ata", "Ata", list, this.btVisualizar);
 			}catch(Exception e){
 				Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
 			}
@@ -491,6 +490,18 @@ public class EditarAtaWindow extends EditarWindow {
 			} catch (Exception e) {
 				Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
 			}
+		}
+	}
+	
+	private void visualizarAta() {
+		try {
+			AtaBO bo = new AtaBO();
+			
+			this.showReport(bo.gerarAta(this.ata));
+		} catch(Exception e) {
+			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+			
+			Notification.show("Visualizar Ata", e.getMessage(), Notification.Type.ERROR_MESSAGE);
 		}
 	}
 
@@ -604,12 +615,6 @@ public class EditarAtaWindow extends EditarWindow {
 		this.gridAnexos.getColumns().get(0).setWidth(200);
 		this.gridAnexos.setWidth("810px");
 		this.gridAnexos.setHeight("310px");
-		this.gridAnexos.addSelectionListener(new SelectionListener() {
-			@Override
-			public void select(SelectionEvent event) {
-				prepareDownloadAnexo();
-			}
-		});
 		
 		this.vlGridAnexos.removeAllComponents();
 		this.vlGridAnexos.addComponent(this.gridAnexos);
@@ -634,39 +639,6 @@ public class EditarAtaWindow extends EditarWindow {
 		for(Anexo a : this.ata.getAnexos()){
 			this.gridAnexos.addRow("Anexo " + String.valueOf(i), a.getDescricao());
 			i++;
-		}
-	}
-	
-	private void prepareDownloadAnexo() {
-		int index = this.getIndexAnexoSelecionado();
-		
-		this.btVisualizarAnexo.removeClickListener(this.listenerClickVisualizarAnexo);
-		new ExtensionUtils().removeAllExtensions(this.btVisualizarAnexo);
-		
-		if(index < 0) {
-			this.listenerClickVisualizarAnexo = new Button.ClickListener() {
-	            @Override
-	            public void buttonClick(ClickEvent event) {
-	            	Notification.show("Visualizar Anexo", "Selecione o anexo para visualizar.", Notification.Type.WARNING_MESSAGE);
-	            }
-	        };
-	        
-    		this.btVisualizarAnexo.addClickListener(this.listenerClickVisualizarAnexo);
-		} else {
-			try {
-				new ExtensionUtils().extendToDownload("Anexo" + String.valueOf(index + 1) + ".pdf", this.ata.getAnexos().get(index).getArquivo(), this.btVisualizarAnexo);
-			} catch (Exception e) {
-				this.listenerClickVisualizarAnexo = new Button.ClickListener() {
-		            @Override
-		            public void buttonClick(ClickEvent event) {
-		            	Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
-		            	
-		            	Notification.show("Visualizar Anexo", e.getMessage(), Notification.Type.ERROR_MESSAGE);
-		            }
-		        };
-		        
-        		this.btVisualizarAnexo.addClickListener(this.listenerClickVisualizarAnexo);
-			}
 		}
 	}
 	
@@ -804,6 +776,16 @@ public class EditarAtaWindow extends EditarWindow {
 		}
 		
 		this.carregarParticipantes();
+	}
+	
+	private void visualizarAnexo() {
+		this.indexAnexo = this.getIndexAnexoSelecionado();
+		
+		if(this.indexAnexo == -1){
+			Notification.show("Visualizar Anexo", "Selecione o anexo para visualizar.", Notification.Type.WARNING_MESSAGE);
+		}else{
+			this.showReport(this.ata.getAnexos().get(indexAnexo).getArquivo());
+		}
 	}
 	
 	private void adicionarAnexo(){
