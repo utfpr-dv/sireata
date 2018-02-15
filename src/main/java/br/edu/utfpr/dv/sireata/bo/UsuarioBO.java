@@ -148,6 +148,10 @@ public class UsuarioBO {
 	}
 	
 	public Usuario validarLogin(String login, String senha) throws Exception{
+		if(login.trim().isEmpty() || senha.trim().isEmpty()) {
+    		throw new Exception("Informe o usuário e a senha.");
+    	}
+		
 		String hash = StringUtils.generateSHA3Hash(senha);
 		
 		if(login.contains("@")){
