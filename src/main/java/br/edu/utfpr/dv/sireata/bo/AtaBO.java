@@ -264,6 +264,30 @@ public class AtaBO {
 		}
 	}
 	
+	public boolean isPresidente(int idUsuario, int idAta) throws Exception{
+		try{
+			AtaDAO dao = new AtaDAO();
+			
+			return dao.isPresidente(idUsuario, idAta);
+		}catch(Exception e){
+			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+			
+			throw new Exception(e.getMessage());
+		}
+	}
+	
+	public boolean isPublicada(int idAta) throws Exception{
+		try{
+			AtaDAO dao = new AtaDAO();
+			
+			return dao.isPublicada(idAta);
+		}catch(Exception e){
+			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+			
+			throw new Exception(e.getMessage());
+		}
+	}
+	
 	public void liberarComentarios(Ata ata) throws Exception{
 		this.liberarComentarios(ata.getIdAta());
 	}
@@ -428,6 +452,25 @@ public class AtaBO {
 			byte[] pdf = this.gerarAta(idAta);
 			
 			dao.publicar(idAta, pdf);
+		}catch(Exception e){
+			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+			
+			throw new Exception(e.getMessage());
+		}
+	}
+	
+	public boolean excluir(int idAta, int idUsuario) throws Exception{
+		try{
+			if(!this.isPresidente(idUsuario, idAta)){
+				throw new Exception("Apenas o presidente da reunião pode excluir a ata.");
+			}
+			if(this.isPublicada(idAta)){
+				throw new Exception("A ata já foi publicada e não pode ser excluída.");
+			}
+			
+			AtaDAO dao = new AtaDAO();
+			
+			return dao.excluir(idAta);
 		}catch(Exception e){
 			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
 			

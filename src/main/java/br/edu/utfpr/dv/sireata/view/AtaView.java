@@ -16,6 +16,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.renderers.DateRenderer;
+import com.vaadin.ui.themes.ValoTheme;
 
 import br.edu.utfpr.dv.sireata.Session;
 import br.edu.utfpr.dv.sireata.bo.AtaBO;
@@ -37,6 +38,7 @@ public class AtaView extends ListView {
 	private final Button btVisualizar;
 	private final Button btPrevia;
 	private final Button btPublicar;
+	private final Button btExcluir;
 	
 	private int tipo;
 	
@@ -81,6 +83,15 @@ public class AtaView extends ListView {
             	publicarAta();
             }
         });
+		this.btPublicar.setStyleName(ValoTheme.BUTTON_FRIENDLY);
+		
+		this.btExcluir = new Button("Excluir", new Button.ClickListener() {
+            @Override
+            public void buttonClick(ClickEvent event) {
+            	excluir();
+            }
+        });
+		this.btExcluir.setStyleName(ValoTheme.BUTTON_DANGER);
 		
 		this.cbCampus.setWidth("300px");
 		this.cbDepartamento.setWidth("300px");
@@ -93,9 +104,10 @@ public class AtaView extends ListView {
 		this.adicionarBotao(this.btVisualizar);
 		this.adicionarBotao(this.btPrevia);
 		this.adicionarBotao(this.btPublicar);
+		this.adicionarBotao(this.btExcluir);
 		
-		this.setBotaoExcluirVisivel(false);
 		this.setBotaoAdicionarVisivel(false);
+		this.setBotaoExcluirVisivel(false);
 	}
 	
 	private void visualizarAta() {
@@ -181,6 +193,44 @@ public class AtaView extends ListView {
 			Notification.show("Editar Ata", e.getMessage(), Notification.Type.ERROR_MESSAGE);
 		}
 	}
+	
+	private void excluir() {
+		try{
+			Object idAta = this.getIdSelecionado();
+			
+			if(idAta == null){
+	    		Notification.show("Excluir Ata", "Selecione a ata para excluir.", Notification.Type.WARNING_MESSAGE);
+	    	}else{
+				AtaBO bo = new AtaBO();
+				
+				if(bo.isPresidente(Session.getUsuario().getIdUsuario(), (int)idAta)) {
+					ConfirmDialog.show(UI.getCurrent(), "Confirma a exclusão da ata? Esta ação não poderá ser revertida.", new ConfirmDialog.Listener() {
+		                public void onClose(ConfirmDialog dialog) {
+		                    if (dialog.isConfirmed()) {
+		                    	try {
+		                    		bo.excluir((int)idAta, Session.getUsuario().getIdUsuario());
+		                    		
+		                    		Notification.show("Excluir Ata", "Ata excluída com sucesso.", Notification.Type.WARNING_MESSAGE);
+		                    		
+		                    		atualizarGrid();
+								} catch (Exception e) {
+									Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+									
+									Notification.show("Excluir Ata", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+								}
+		                    }
+		                }
+		            });
+				} else {
+					throw new Exception("Apenas o presidente da reunião pode excluir a ata.");
+				}
+	    	}
+		}catch(Exception e){
+			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+			
+			Notification.show("Excluir Ata", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+		}
+	}
 
 	@Override
 	public void excluir(Object id) {
@@ -259,6 +309,7 @@ public class AtaView extends ListView {
 			this.setBotaoEditarVisivel(false);
 			this.btPrevia.setVisible(false);
 			this.btPublicar.setVisible(false);
+			this.btExcluir.setVisible(false);
 		}
 		
 		this.atualizarGrid();

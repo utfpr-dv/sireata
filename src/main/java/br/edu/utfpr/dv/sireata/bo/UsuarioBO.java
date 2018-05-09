@@ -127,7 +127,7 @@ public class UsuarioBO {
 				throw new Exception("Usuário não encontrado.");
 			}
 			if(!usuario.isExterno()){
-				throw new Exception("A alteração de senha é permitida apenas para usuários externos. Alunos e Professores devem alterar a senha através do Sistema Acadêmico.");
+				throw new Exception("A alteração de senha é permitida apenas para usuários externos. Acadêmicos e Professores devem alterar a senha através do Sistema Acadêmico.");
 			}
 			if(!usuario.getSenha().equals(hashAtual)){
 				throw new Exception("A senha atual não confere.");

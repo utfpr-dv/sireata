@@ -607,5 +607,85 @@ public class AtaDAO {
 				conn.close();
 		}
 	}
+	
+	public boolean isPresidente(int idUsuario, int idAta) throws SQLException{
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try{
+			conn = ConnectionDAO.getInstance().getConnection();
+			stmt = conn.createStatement();
+		
+			rs = stmt.executeQuery("SELECT atas.idAta FROM atas " +
+				"WHERE idAta=" + String.valueOf(idAta) + " AND idPresidente=" + String.valueOf(idUsuario));
+		
+			return rs.next();
+		}finally{
+			if((rs != null) && !rs.isClosed())
+				rs.close();
+			if((stmt != null) && !stmt.isClosed())
+				stmt.close();
+			if((conn != null) && !conn.isClosed())
+				conn.close();
+		}
+	}
+	
+	public boolean isPublicada(int idAta) throws SQLException{
+		Connection conn = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		
+		try{
+			conn = ConnectionDAO.getInstance().getConnection();
+			stmt = conn.createStatement();
+		
+			rs = stmt.executeQuery("SELECT atas.publicada FROM atas " +
+				"WHERE idAta=" + String.valueOf(idAta));
+		
+			if(rs.next()) {
+				return rs.getInt("publicada") == 1;
+			} else {
+				return false;
+			}
+		}finally{
+			if((rs != null) && !rs.isClosed())
+				rs.close();
+			if((stmt != null) && !stmt.isClosed())
+				stmt.close();
+			if((conn != null) && !conn.isClosed())
+				conn.close();
+		}
+	}
+	
+	public boolean excluir(int idAta) throws SQLException{
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try{
+			conn = ConnectionDAO.getInstance().getConnection();
+			conn.setAutoCommit(false);
+			stmt = conn.createStatement();
+			
+			stmt.execute("DELETE FROM comentarios WHERE idPauta IN (SELECT idPauta FROM pautas WHERE idAta=" + String.valueOf(idAta) + ")");
+			stmt.execute("DELETE FROM pautas WHERE idAta=" + String.valueOf(idAta));
+			stmt.execute("DELETE FROM ataparticipantes WHERE idAta=" + String.valueOf(idAta));
+			stmt.execute("DELETE FROM anexos WHERE idAta=" + String.valueOf(idAta));
+			boolean ret = stmt.execute("DELETE FROM atas WHERE idAta=" + String.valueOf(idAta));
+			
+			conn.commit();
+			
+			return ret;
+		}catch(SQLException ex) {
+			conn.rollback();
+			throw ex;
+		}finally{
+			conn.setAutoCommit(true);
+			if((stmt != null) && !stmt.isClosed())
+				stmt.close();
+			if((conn != null) && !conn.isClosed())
+				conn.close();
+		}
+	}
 
 }
