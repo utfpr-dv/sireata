@@ -475,6 +475,13 @@ public class EditarAtaWindow extends EditarWindow {
 					this.btRemoverParticipante.setVisible(false);
 					this.setBotaoSalvarVisivel(false);
 					this.btEditarPauta.setCaption("Visualizar Item");
+					this.btAdicionarAnexo.setVisible(false);
+					this.btEditarAnexo.setVisible(false);
+					this.btRemoverAnexo.setVisible(false);
+					this.btMoverAnexoAcima.setVisible(false);
+					this.btMoverAnexoAbaixo.setVisible(false);
+					this.btVisualizarAnexo.setCaption("Visualizar Anexo");
+					this.btVisualizarAnexo.setWidth("150px");
 				}
 			}catch(Exception e){
 				Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
