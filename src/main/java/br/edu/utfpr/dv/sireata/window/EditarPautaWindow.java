@@ -3,11 +3,13 @@ package br.edu.utfpr.dv.sireata.window;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.ui.Button.ClickEvent;
 
 import br.edu.utfpr.dv.sireata.Session;
@@ -58,6 +60,8 @@ public class EditarPautaWindow extends EditarWindow {
             	incluirComentario();
             }
         });
+		this.btComentar.setIcon(FontAwesome.PLUS);
+		this.btComentar.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 		
 		this.adicionarCampo(this.tfTitulo);
 		this.adicionarCampo(this.taDescricao);

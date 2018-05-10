@@ -11,6 +11,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
@@ -69,6 +70,8 @@ public class AtaView extends ListView {
             	visualizarAta();
             }
         });
+		this.btVisualizar.setIcon(FontAwesome.FILE_PDF_O);
+		this.btVisualizar.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		
 		this.btPrevia = new Button("Prévia", new Button.ClickListener() {
             @Override
@@ -76,6 +79,7 @@ public class AtaView extends ListView {
             	visualizarPrevia();
             }
         });
+		this.btPrevia.setIcon(FontAwesome.FILE_PDF_O);
 		
 		this.btPublicar = new Button("Publicar", new Button.ClickListener() {
             @Override
@@ -83,6 +87,7 @@ public class AtaView extends ListView {
             	publicarAta();
             }
         });
+		this.btPublicar.setIcon(FontAwesome.SEND);
 		this.btPublicar.setStyleName(ValoTheme.BUTTON_FRIENDLY);
 		
 		this.btExcluir = new Button("Excluir", new Button.ClickListener() {
@@ -91,6 +96,7 @@ public class AtaView extends ListView {
             	excluir();
             }
         });
+		this.btExcluir.setIcon(FontAwesome.TRASH);
 		this.btExcluir.setStyleName(ValoTheme.BUTTON_DANGER);
 		
 		this.cbCampus.setWidth("300px");

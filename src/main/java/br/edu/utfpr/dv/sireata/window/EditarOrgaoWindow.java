@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.Grid;
@@ -15,6 +16,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.themes.ValoTheme;
 
 import br.edu.utfpr.dv.sireata.bo.CampusBO;
 import br.edu.utfpr.dv.sireata.bo.OrgaoBO;
@@ -106,6 +108,9 @@ public class EditarOrgaoWindow extends EditarWindow {
 		
 		this.tab = new TabSheet();
 		this.tab.setWidth("820px");
+		this.tab.addStyleName(ValoTheme.TABSHEET_FRAMED);
+		this.tab.addStyleName(ValoTheme.TABSHEET_EQUAL_WIDTH_TABS);
+		this.tab.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
 		
 		this.tab.addTab(tab1, "Órgão");
 		
@@ -118,6 +123,8 @@ public class EditarOrgaoWindow extends EditarWindow {
             	adicionarMembro();
             }
         });
+		this.btAdicionarMembro.setIcon(FontAwesome.PLUS);
+		this.btAdicionarMembro.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 		this.btAdicionarMembro.setWidth("150px");
 		
 		this.btEditarMembro = new Button("Editar", new Button.ClickListener() {
@@ -126,6 +133,8 @@ public class EditarOrgaoWindow extends EditarWindow {
             	editarMembro();
             }
         });
+		this.btEditarMembro.setIcon(FontAwesome.EDIT);
+		this.btEditarMembro.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		this.btEditarMembro.setWidth("150px");
 		
 		this.btRemoverMembro = new Button("Remover", new Button.ClickListener() {
@@ -134,6 +143,8 @@ public class EditarOrgaoWindow extends EditarWindow {
             	removerMembro();
             }
         });
+		this.btRemoverMembro.setIcon(FontAwesome.TRASH);
+		this.btRemoverMembro.addStyleName(ValoTheme.BUTTON_DANGER);
 		this.btRemoverMembro.setWidth("150px");
 		
 		HorizontalLayout h3 = new HorizontalLayout(this.btAdicionarMembro, this.btEditarMembro, this.btRemoverMembro);

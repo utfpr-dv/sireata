@@ -10,6 +10,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 import com.vaadin.event.ItemClickEvent;
 import com.vaadin.event.ItemClickEvent.ItemClickListener;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -18,7 +19,7 @@ import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-
+import com.vaadin.ui.themes.ValoTheme;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Component;
 import com.vaadin.ui.Grid.SelectionMode;
@@ -60,6 +61,8 @@ public abstract class ListView extends BasicView {
             	adicionar();
             }
         });
+		this.btAdicionar.setIcon(FontAwesome.PLUS);
+		this.btAdicionar.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 		this.btAdicionar.setWidth("150px");
 		
 		this.btEditar = new Button("Editar", new Button.ClickListener() {
@@ -68,6 +71,8 @@ public abstract class ListView extends BasicView {
             	editar();
             }
         });
+		this.btEditar.setIcon(FontAwesome.EDIT);
+		this.btEditar.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		this.btEditar.setWidth("150px");
 		
 		this.btExcluir = new Button("Excluir", new Button.ClickListener() {
@@ -76,6 +81,8 @@ public abstract class ListView extends BasicView {
             	excluir();
             }
         });
+		this.btExcluir.setIcon(FontAwesome.TRASH);
+		this.btExcluir.addStyleName(ValoTheme.BUTTON_DANGER);
 		this.btExcluir.setWidth("150px");
 		
 		this.vlBotoes = new VerticalLayout(btAdicionar, btEditar, btExcluir);
@@ -97,6 +104,7 @@ public abstract class ListView extends BasicView {
             	}
             }
         });
+		this.btFiltrar.setIcon(FontAwesome.FILTER);
 		this.btFiltrar.setWidth("150px");
 		
 		this.hlCampos = new HorizontalLayout();

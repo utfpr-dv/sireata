@@ -2,8 +2,10 @@ package br.edu.utfpr.dv.sireata.window;
 
 import java.util.UUID;
 
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Window;
+import com.vaadin.ui.themes.ValoTheme;
 
 import br.edu.utfpr.dv.sireata.Session;
 import br.edu.utfpr.dv.sireata.view.ListView;
@@ -33,6 +35,8 @@ public abstract class EditarWindow extends Window {
             	salvar();
             }
         });
+		this.btSalvar.setIcon(FontAwesome.SAVE);
+		this.btSalvar.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		this.btSalvar.setWidth("150px");
 		
 		this.vlCampos = new VerticalLayout();

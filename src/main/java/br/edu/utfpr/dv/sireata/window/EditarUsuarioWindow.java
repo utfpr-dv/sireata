@@ -7,15 +7,12 @@ import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
 import com.vaadin.ui.CheckBox;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.Notification;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
 
 import br.edu.utfpr.dv.sireata.Session;
 import br.edu.utfpr.dv.sireata.bo.UsuarioBO;
-import br.edu.utfpr.dv.sireata.component.ComboCampus;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 import br.edu.utfpr.dv.sireata.util.StringUtils;
 import br.edu.utfpr.dv.sireata.view.ListView;

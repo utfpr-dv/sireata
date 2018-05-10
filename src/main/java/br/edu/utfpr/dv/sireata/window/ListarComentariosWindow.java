@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
@@ -12,6 +13,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.themes.ValoTheme;
 
 import br.edu.utfpr.dv.sireata.bo.ComentarioBO;
 import br.edu.utfpr.dv.sireata.model.Comentario;
@@ -43,6 +45,8 @@ public class ListarComentariosWindow extends Window {
             	visualizarComentario();
             }
         });
+		this.btVisualizar.setIcon(FontAwesome.SEARCH);
+		this.btVisualizar.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		this.btVisualizar.setWidth("150px");
 		
 		HorizontalLayout hl = new HorizontalLayout(this.gridComentarios, this.btVisualizar);

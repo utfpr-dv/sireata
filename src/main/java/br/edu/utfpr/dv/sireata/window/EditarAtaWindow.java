@@ -9,6 +9,7 @@ import org.vaadin.dialogs.ConfirmDialog;
 
 import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.data.Property.ValueChangeListener;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.DateField;
@@ -22,6 +23,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Button.ClickEvent;
+import com.vaadin.ui.themes.ValoTheme;
 
 import br.edu.utfpr.dv.sireata.Session;
 import br.edu.utfpr.dv.sireata.bo.AnexoBO;
@@ -212,6 +214,9 @@ public class EditarAtaWindow extends EditarWindow {
 		
 		this.tab = new TabSheet();
 		this.tab.setWidth("820px");
+		this.tab.addStyleName(ValoTheme.TABSHEET_FRAMED);
+		this.tab.addStyleName(ValoTheme.TABSHEET_EQUAL_WIDTH_TABS);
+		this.tab.addStyleName(ValoTheme.TABSHEET_PADDED_TABBAR);
 		
 		this.tab.addTab(tab1, "Ata");
 		
@@ -224,6 +229,8 @@ public class EditarAtaWindow extends EditarWindow {
             	adicionarPauta();
             }
         });
+		this.btAdicionarPauta.setIcon(FontAwesome.PLUS);
+		this.btAdicionarPauta.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 		this.btAdicionarPauta.setWidth("150px");
 		
 		this.btEditarPauta = new Button("Editar", new Button.ClickListener() {
@@ -232,6 +239,8 @@ public class EditarAtaWindow extends EditarWindow {
             	editarPauta();
             }
         });
+		this.btEditarPauta.setIcon(FontAwesome.EDIT);
+		this.btEditarPauta.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		this.btEditarPauta.setWidth("150px");
 		
 		this.btRemoverPauta = new Button("Remover", new Button.ClickListener() {
@@ -240,6 +249,8 @@ public class EditarAtaWindow extends EditarWindow {
             	removerPauta();
             }
         });
+		this.btRemoverPauta.setIcon(FontAwesome.TRASH);
+		this.btRemoverPauta.addStyleName(ValoTheme.BUTTON_DANGER);
 		this.btRemoverPauta.setWidth("150px");
 		
 		this.btPautaAcima = new Button("Para Cima", new Button.ClickListener() {
@@ -248,6 +259,7 @@ public class EditarAtaWindow extends EditarWindow {
             	moverPautaAcima();
             }
         });
+		this.btPautaAcima.setIcon(FontAwesome.ARROW_UP);
 		this.btPautaAcima.setWidth("150px");
 		
 		this.btPautaAbaixo = new Button("Para Baixo", new Button.ClickListener() {
@@ -256,6 +268,7 @@ public class EditarAtaWindow extends EditarWindow {
             	moverPautaAbaixo();
             }
         });
+		this.btPautaAbaixo.setIcon(FontAwesome.ARROW_DOWN);
 		this.btPautaAbaixo.setWidth("150px");
 		
 		HorizontalLayout h6 = new HorizontalLayout(this.btAdicionarPauta, this.btEditarPauta, this.btRemoverPauta, this.btPautaAcima, this.btPautaAbaixo);
@@ -275,6 +288,8 @@ public class EditarAtaWindow extends EditarWindow {
             	adicionarParticipante();
             }
         });
+		this.btAdicionarParticipante.setIcon(FontAwesome.PLUS);
+		this.btAdicionarParticipante.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 		this.btAdicionarParticipante.setWidth("150px");
 		
 		this.btEditarParticipante = new Button("Editar", new Button.ClickListener() {
@@ -283,6 +298,8 @@ public class EditarAtaWindow extends EditarWindow {
             	editarParticipante();
             }
         });
+		this.btEditarParticipante.setIcon(FontAwesome.EDIT);
+		this.btEditarParticipante.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		this.btEditarParticipante.setWidth("150px");
 		
 		this.btRemoverParticipante = new Button("Remover", new Button.ClickListener() {
@@ -291,6 +308,8 @@ public class EditarAtaWindow extends EditarWindow {
             	removerParticipante();
             }
         });
+		this.btRemoverParticipante.setIcon(FontAwesome.TRASH);
+		this.btRemoverParticipante.addStyleName(ValoTheme.BUTTON_DANGER);
 		this.btRemoverParticipante.setWidth("150px");
 		
 		HorizontalLayout h5 = new HorizontalLayout(this.btAdicionarParticipante, this.btEditarParticipante, this.btRemoverParticipante);
@@ -312,6 +331,7 @@ public class EditarAtaWindow extends EditarWindow {
             	visualizarAnexo();
             }
         });
+		this.btVisualizarAnexo.setIcon(FontAwesome.DOWNLOAD);
 		this.btVisualizarAnexo.setWidth("125px");
 		
 		this.btAdicionarAnexo = new Button("Adicionar", new Button.ClickListener() {
@@ -320,6 +340,8 @@ public class EditarAtaWindow extends EditarWindow {
             	adicionarAnexo();
             }
         });
+		this.btAdicionarAnexo.setIcon(FontAwesome.PLUS);
+		this.btAdicionarAnexo.addStyleName(ValoTheme.BUTTON_FRIENDLY);
 		this.btAdicionarAnexo.setWidth("125px");
 		
 		this.btEditarAnexo = new Button("Editar", new Button.ClickListener() {
@@ -328,6 +350,8 @@ public class EditarAtaWindow extends EditarWindow {
             	editarAnexo();
             }
         });
+		this.btEditarAnexo.setIcon(FontAwesome.EDIT);
+		this.btEditarAnexo.addStyleName(ValoTheme.BUTTON_PRIMARY);
 		this.btEditarAnexo.setWidth("125px");
 		
 		this.btRemoverAnexo = new Button("Remover", new Button.ClickListener() {
@@ -336,6 +360,8 @@ public class EditarAtaWindow extends EditarWindow {
             	removerAnexo();
             }
         });
+		this.btRemoverAnexo.setIcon(FontAwesome.TRASH);
+		this.btRemoverAnexo.addStyleName(ValoTheme.BUTTON_DANGER);
 		this.btRemoverAnexo.setWidth("125px");
 		
 		this.btMoverAnexoAcima = new Button("Para Cima", new Button.ClickListener() {
@@ -344,6 +370,7 @@ public class EditarAtaWindow extends EditarWindow {
             	moverAnexoAcima();
             }
         });
+		this.btMoverAnexoAcima.setIcon(FontAwesome.ARROW_UP);
 		this.btMoverAnexoAcima.setWidth("125px");
 		
 		this.btMoverAnexoAbaixo = new Button("Para Baixo", new Button.ClickListener() {
@@ -352,6 +379,7 @@ public class EditarAtaWindow extends EditarWindow {
             	moverAnexoAbaixo();
             }
         });
+		this.btMoverAnexoAbaixo.setIcon(FontAwesome.ARROW_DOWN);
 		this.btMoverAnexoAbaixo.setWidth("125px");
 		
 		HorizontalLayout h7 = new HorizontalLayout(this.btVisualizarAnexo, this.btAdicionarAnexo, this.btEditarAnexo, this.btRemoverAnexo, this.btMoverAnexoAcima, this.btMoverAnexoAbaixo);
@@ -368,6 +396,7 @@ public class EditarAtaWindow extends EditarWindow {
             	liberarComentarios();
             }
         });
+		this.btLiberarComentarios.setIcon(FontAwesome.UNLOCK);
 		
 		this.btBloquearComentarios = new Button("Bloquear Comentários", new Button.ClickListener() {
             @Override
@@ -375,6 +404,7 @@ public class EditarAtaWindow extends EditarWindow {
             	bloquearComentarios();
             }
         });
+		this.btBloquearComentarios.setIcon(FontAwesome.LOCK);
 		
 		this.btPublicar = new Button("Publicar Ata", new Button.ClickListener() {
             @Override
@@ -389,6 +419,7 @@ public class EditarAtaWindow extends EditarWindow {
             	visualizarAta();
             }
         });
+		this.btVisualizar.setIcon(FontAwesome.SEARCH);
 		
 		this.adicionarBotao(this.btLiberarComentarios);
 		this.adicionarBotao(this.btBloquearComentarios);
