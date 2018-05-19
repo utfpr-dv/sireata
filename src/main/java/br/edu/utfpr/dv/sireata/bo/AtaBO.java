@@ -43,6 +43,18 @@ public class AtaBO {
 		}
 	}
 	
+	public Ata buscarPorNumero(int idOrgao, TipoAta tipo, int numero, int ano) throws Exception{
+		try{
+			AtaDAO dao = new AtaDAO();
+			
+			return dao.buscarPorNumero(idOrgao, tipo, numero, ano);
+		}catch(Exception e){
+			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
+			
+			throw new Exception(e.getMessage());
+		}
+	}
+	
 	public Ata buscarPorPauta(int idPauta) throws Exception{
 		try{
 			AtaDAO dao = new AtaDAO();

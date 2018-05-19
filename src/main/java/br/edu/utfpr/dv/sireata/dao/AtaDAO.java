@@ -48,6 +48,43 @@ public class AtaDAO {
 		}
 	}
 	
+	public Ata buscarPorNumero(int idOrgao, TipoAta tipo, int numero, int ano) throws SQLException{
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		try{
+			conn = ConnectionDAO.getInstance().getConnection();
+			stmt = conn.prepareStatement(
+						"SELECT atas.*, orgaos.nome AS orgao, p.nome AS presidente, s.nome AS secretario " +
+						"FROM atas INNER JOIN orgaos ON orgaos.idOrgao=atas.idOrgao " +
+						"INNER JOIN departamentos ON departamentos.idDepartamento=orgaos.idDepartamento " +
+						"INNER JOIN usuarios p ON p.idUsuario=atas.idPresidente " +
+						"INNER JOIN usuarios s ON s.idUsuario=atas.idSecretario " +
+						"WHERE atas.publicada = 1 AND atas.idOrgao = ? AND atas.tipo = ? AND atas.numero = ? AND YEAR(atas.data) = ?");
+			
+			stmt.setInt(1, idOrgao);
+			stmt.setInt(2, tipo.getValue());
+			stmt.setInt(3, numero);
+			stmt.setInt(4, ano);
+			
+			rs = stmt.executeQuery();
+			
+			if(rs.next()){
+				return this.carregarObjeto(rs);
+			}else{
+				return null;
+			}
+		}finally{
+			if((rs != null) && !rs.isClosed())
+				rs.close();
+			if((stmt != null) && !stmt.isClosed())
+				stmt.close();
+			if((conn != null) && !conn.isClosed())
+				conn.close();
+		}
+	}
+	
 	public Ata buscarPorPauta(int idPauta) throws SQLException{
 		Connection conn = null;
 		PreparedStatement stmt = null;
