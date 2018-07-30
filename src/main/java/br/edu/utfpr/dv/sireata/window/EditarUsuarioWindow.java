@@ -29,7 +29,7 @@ public class EditarUsuarioWindow extends EditarWindow {
 	private final CheckBox cbAdministrador;
 
 	public EditarUsuarioWindow(Usuario usuario, ListView parentView){
-		super("Editar Usu�rio", parentView);
+		super("Editar Usuário", parentView);
 		
 		if(usuario == null){
 			this.usuario = new Usuario();
@@ -49,7 +49,7 @@ public class EditarUsuarioWindow extends EditarWindow {
 		this.tfEmail.setWidth("400px");
 		this.tfEmail.setMaxLength(100);
 		
-		this.cbExterno = new CheckBox("Usu�rio externo");
+		this.cbExterno = new CheckBox("Usuário externo");
 		this.cbExterno.addValueChangeListener(new ValueChangeListener() {
 			@Override
 			public void valueChange(ValueChangeEvent event) {
@@ -118,14 +118,14 @@ public class EditarUsuarioWindow extends EditarWindow {
 			
 			bo.salvar(usuario);
 			
-			Notification.show("Salvar Usu�rio", "Usu�rio salvo com sucesso.", Notification.Type.HUMANIZED_MESSAGE);
+			Notification.show("Salvar Usuário", "Usuário salvo com sucesso.", Notification.Type.HUMANIZED_MESSAGE);
 			
 			this.atualizarGridPai();
 			this.close();
 		}catch(Exception e){
 			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
 			
-			Notification.show("Salvar Usu�rio", e.getMessage(), Notification.Type.ERROR_MESSAGE);
+			Notification.show("Salvar Usuário", e.getMessage(), Notification.Type.ERROR_MESSAGE);
 		}
 	}
 
