@@ -600,6 +600,7 @@ public class EditarAtaWindow extends EditarWindow {
 					
 					participante.setParticipante(membro.getUsuario());
 					participante.setDesignacao(membro.getDesignacao());
+					participante.setMembro(true);
 					
 					this.ata.getParticipantes().add(participante);
 				}
@@ -617,8 +618,10 @@ public class EditarAtaWindow extends EditarWindow {
 		this.gridParticipantes = new Grid();
 		this.gridParticipantes.addColumn("Participante", String.class);
 		this.gridParticipantes.addColumn("Designação", String.class);
+		this.gridParticipantes.addColumn("Membro", String.class);
 		this.gridParticipantes.addColumn("Presente", String.class);
 		this.gridParticipantes.getColumns().get(2).setWidth(100);
+		this.gridParticipantes.getColumns().get(3).setWidth(100);
 		this.gridParticipantes.setWidth("810px");
 		this.gridParticipantes.setHeight("310px");
 		
@@ -642,7 +645,7 @@ public class EditarAtaWindow extends EditarWindow {
 		}
 		
 		for(AtaParticipante p : this.ata.getParticipantes()){
-			this.gridParticipantes.addRow(p.getParticipante().getNome(), p.getDesignacao(), (p.isPresente() ? "Sim" : "Não"));
+			this.gridParticipantes.addRow(p.getParticipante().getNome(), p.getDesignacao(), (p.isMembro() ? "Sim" : "Não"), (p.isPresente() ? "Sim" : "Não"));
 		}
 	}
 	

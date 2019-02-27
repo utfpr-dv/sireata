@@ -120,6 +120,7 @@ CREATE TABLE `ataparticipantes` (
 	`idusuario` int(11) NOT NULL,
 	`designacao` VARCHAR(50) NOT NULL,
 	`presente` tinyint(4) NOT NULL,
+	`membro` tinyint(4) NOT NULL,
 	`motivo` VARCHAR(255) NOT NULL,
 	PRIMARY KEY (`idataparticipante`),
 	KEY `fk_ataparticipantes_ata_idx` (`idata`),

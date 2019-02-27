@@ -82,9 +82,9 @@ public class AtaParticipanteDAO {
 			conn = ConnectionDAO.getInstance().getConnection();
 		
 			if(insert){
-				stmt = conn.prepareStatement("INSERT INTO ataparticipantes(idAta, idUsuario, presente, motivo, designacao) VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+				stmt = conn.prepareStatement("INSERT INTO ataparticipantes(idAta, idUsuario, presente, motivo, designacao, membro) VALUES(?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 			}else{
-				stmt = conn.prepareStatement("UPDATE ataparticipantes SET idAta=?, idUsuario=?, presente=?, motivo=?, designacao=? WHERE idAtaParticipante=?");
+				stmt = conn.prepareStatement("UPDATE ataparticipantes SET idAta=?, idUsuario=?, presente=?, motivo=?, designacao=?, membro=? WHERE idAtaParticipante=?");
 			}
 			
 			stmt.setInt(1, participante.getAta().getIdAta());
@@ -92,9 +92,10 @@ public class AtaParticipanteDAO {
 			stmt.setInt(3, (participante.isPresente() ? 1 : 0));
 			stmt.setString(4, participante.getMotivo());
 			stmt.setString(5, participante.getDesignacao());
+			stmt.setInt(6, (participante.isMembro() ? 1 : 0));
 			
 			if(!insert){
-				stmt.setInt(6, participante.getIdAtaParticipante());
+				stmt.setInt(7, participante.getIdAtaParticipante());
 			}
 			
 			stmt.execute();
@@ -145,6 +146,7 @@ public class AtaParticipanteDAO {
 		participante.setPresente(rs.getInt("presente") == 1);
 		participante.setMotivo(rs.getString("motivo"));
 		participante.setDesignacao(rs.getString("designacao"));
+		participante.setMembro(rs.getInt("membro") == 1);
 		
 		return participante;
 	}

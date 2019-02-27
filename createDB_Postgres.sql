@@ -120,6 +120,7 @@ CREATE TABLE ataparticipantes (
 	idusuario INT NOT NULL,
 	designacao VARCHAR(50) NOT NULL,
 	presente SMALLINT NOT NULL,
+	membro SMALLINT NOT NULL,
 	motivo VARCHAR(255) NOT NULL,
 	PRIMARY KEY (idataparticipante),
 	CONSTRAINT fk_ataparticipantes_ata FOREIGN KEY (idata) REFERENCES atas (idata) ON DELETE NO ACTION ON UPDATE NO ACTION,

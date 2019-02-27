@@ -8,6 +8,7 @@ public class AtaParticipante {
 	private boolean presente;
 	private String motivo;
 	private String designacao;
+	private boolean membro;
 	
 	public AtaParticipante(){
 		this.setIdAtaParticipante(0);
@@ -16,6 +17,7 @@ public class AtaParticipante {
 		this.setPresente(true);
 		this.setMotivo("");
 		this.setDesignacao("");
+		this.setMembro(false);
 	}
 	
 	public int getIdAtaParticipante() {
@@ -53,6 +55,12 @@ public class AtaParticipante {
 	}
 	public void setDesignacao(String designacao) {
 		this.designacao = designacao;
+	}
+	public boolean isMembro() {
+		return membro;
+	}
+	public void setMembro(boolean membro) {
+		this.membro = membro;
 	}
 
 }

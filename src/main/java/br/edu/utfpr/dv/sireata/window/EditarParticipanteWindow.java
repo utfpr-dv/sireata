@@ -20,6 +20,7 @@ public class EditarParticipanteWindow extends EditarWindow {
 	private final TextField tfDesignacao;
 	private final CheckBox cbPresente;
 	private final TextField tfMotivo;
+	private final CheckBox cbMembro;
 	
 	public EditarParticipanteWindow(AtaParticipante participante, EditarAtaWindow parentWindow){
 		super("Editar Participante", null);
@@ -40,11 +41,14 @@ public class EditarParticipanteWindow extends EditarWindow {
 		
 		this.cbPresente = new CheckBox("Presente");
 		
+		this.cbMembro = new CheckBox("Membro do órgão");
+		
 		this.tfMotivo = new TextField("Motivo da Ausência");
 		this.tfMotivo.setWidth("400px");
 		
 		this.adicionarCampo(this.cbUsuario);
 		this.adicionarCampo(this.tfDesignacao);
+		this.adicionarCampo(this.cbMembro);
 		this.adicionarCampo(this.cbPresente);
 		this.adicionarCampo(this.tfMotivo);
 		
@@ -56,6 +60,7 @@ public class EditarParticipanteWindow extends EditarWindow {
 		this.tfDesignacao.setValue(this.participante.getDesignacao());
 		this.cbPresente.setValue(this.participante.isPresente());
 		this.tfMotivo.setValue(this.participante.getMotivo());
+		this.cbMembro.setValue(this.participante.isMembro());
 	}
 	
 	@Override
@@ -65,6 +70,7 @@ public class EditarParticipanteWindow extends EditarWindow {
 			this.participante.setDesignacao(this.tfDesignacao.getValue());
 			this.participante.setPresente(this.cbPresente.getValue());
 			this.participante.setMotivo(this.tfMotivo.getValue());
+			this.participante.setMembro(this.cbMembro.getValue());
 			
 			AtaParticipanteBO bo = new AtaParticipanteBO();
 			

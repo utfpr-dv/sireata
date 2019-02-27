@@ -391,7 +391,7 @@ public class AtaBO {
 					pr.setMotivo(participante.getMotivo());					
 				}
 				
-				if(odao.isMembro(ata.getOrgao().getIdOrgao(), participante.getParticipante().getIdUsuario())){
+				if(participante.isMembro()){
 					report.getParticipantesMembros().add(pr);
 				}else{
 					report.getDemaisParticipantes().add(pr);
