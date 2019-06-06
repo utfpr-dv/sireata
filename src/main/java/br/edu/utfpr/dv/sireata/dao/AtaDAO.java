@@ -11,6 +11,7 @@ import java.util.List;
 
 import br.edu.utfpr.dv.sireata.model.Ata;
 import br.edu.utfpr.dv.sireata.model.Ata.TipoAta;
+import br.edu.utfpr.dv.sireata.util.DateUtils;
 
 public class AtaDAO {
 	
@@ -520,10 +521,11 @@ public class AtaDAO {
 		
 		try{
 			conn = ConnectionDAO.getInstance().getConnection();
-			stmt = conn.prepareStatement("UPDATE atas SET documento=?, publicada=1, aceitarComentarios=0 WHERE publicada=0 AND idAta=?");
+			stmt = conn.prepareStatement("UPDATE atas SET documento=?, dataPublicacao=?, publicada=1, aceitarComentarios=0 WHERE publicada=0 AND idAta=?");
 		
 			stmt.setBytes(1, documento);
-			stmt.setInt(2, idAta);
+			stmt.setTimestamp(2, new java.sql.Timestamp(DateUtils.getNow().getTime().getTime()));
+			stmt.setInt(3, idAta);
 			
 			stmt.execute();
 		}finally{
@@ -588,7 +590,7 @@ public class AtaDAO {
 		ata.setAudio(rs.getBytes("audio"));
 		ata.setPublicada(rs.getInt("publicada") == 1);
 		ata.setAceitarComentarios(rs.getInt("aceitarComentarios") == 1);
-		ata.setDataPublicacao(rs.getDate("dataPublicacao"));
+		ata.setDataPublicacao(rs.getTimestamp("dataPublicacao"));
 		ata.setDocumento(rs.getBytes("documento"));
 		
 		return ata;
