@@ -1,4 +1,4 @@
-package br.edu.utfpr.dv.sireata.window;
+package br.edu.utfpr.dv.sireata.view.editar;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;

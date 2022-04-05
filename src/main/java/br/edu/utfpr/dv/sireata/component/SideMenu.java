@@ -23,10 +23,10 @@ import br.edu.utfpr.dv.sireata.view.DepartamentoView;
 import br.edu.utfpr.dv.sireata.view.LoginView;
 import br.edu.utfpr.dv.sireata.view.OrgaoView;
 import br.edu.utfpr.dv.sireata.view.UsuarioView;
-import br.edu.utfpr.dv.sireata.window.EditarAtaWindow;
-import br.edu.utfpr.dv.sireata.window.EditarSenhaWindow;
-import br.edu.utfpr.dv.sireata.window.EditarUsuarioWindow;
-import br.edu.utfpr.dv.sireata.window.SobreWindow;
+import br.edu.utfpr.dv.sireata.view.editar.EditarAtaWindow;
+import br.edu.utfpr.dv.sireata.view.editar.EditarSenhaWindow;
+import br.edu.utfpr.dv.sireata.view.editar.EditarUsuarioWindow;
+import br.edu.utfpr.dv.sireata.view.editar.SobreWindow;
 
 public class SideMenu extends CustomComponent {
 	

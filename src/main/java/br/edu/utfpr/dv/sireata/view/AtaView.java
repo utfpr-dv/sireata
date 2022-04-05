@@ -27,7 +27,7 @@ import br.edu.utfpr.dv.sireata.component.ComboDepartamento;
 import br.edu.utfpr.dv.sireata.component.ComboOrgao;
 import br.edu.utfpr.dv.sireata.model.Ata;
 import br.edu.utfpr.dv.sireata.util.DateUtils;
-import br.edu.utfpr.dv.sireata.window.EditarAtaWindow;
+import br.edu.utfpr.dv.sireata.view.editar.EditarAtaWindow;
 
 public class AtaView extends ListView {
 	

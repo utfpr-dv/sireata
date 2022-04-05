@@ -24,7 +24,7 @@ public class DateUtils {
 		return now;
 	}
 	
-	public static int getSemester(){
+	/*public static int getSemester(){
 		Calendar today = DateUtils.getToday();
 		
 		if(today.get(Calendar.MONTH) >= 6){
@@ -32,7 +32,7 @@ public class DateUtils {
 		}else{
 			return 1;
 		}
-	}
+	} */
 	
 	public static int getSemester(Date date){
 		Calendar cal = Calendar.getInstance();
@@ -44,12 +44,12 @@ public class DateUtils {
 			return 1;
 		}
 	}
-	
+	/*
 	public static int getYear(){
 		Calendar today = DateUtils.getToday();
 		
 		return today.get(Calendar.YEAR);
-	}
+	}*/
 	
 	public static int getDayOfMonth(Date date){
 		Calendar cal = Calendar.getInstance();

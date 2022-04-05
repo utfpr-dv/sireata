@@ -14,7 +14,7 @@ import br.edu.utfpr.dv.sireata.component.ComboCampus;
 import br.edu.utfpr.dv.sireata.component.ComboCampus.TipoFiltro;
 import br.edu.utfpr.dv.sireata.component.ComboDepartamento;
 import br.edu.utfpr.dv.sireata.model.Orgao;
-import br.edu.utfpr.dv.sireata.window.EditarOrgaoWindow;
+import br.edu.utfpr.dv.sireata.view.editar.EditarOrgaoWindow;
 
 public class OrgaoView extends ListView {
 	

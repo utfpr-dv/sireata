@@ -9,7 +9,7 @@ import com.vaadin.ui.UI;
 
 import br.edu.utfpr.dv.sireata.bo.CampusBO;
 import br.edu.utfpr.dv.sireata.model.Campus;
-import br.edu.utfpr.dv.sireata.window.EditarCampusWindow;
+import br.edu.utfpr.dv.sireata.view.editar.EditarCampusWindow;
 
 public class CampusView extends ListView {
 	
