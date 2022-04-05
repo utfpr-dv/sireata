@@ -13,7 +13,7 @@ import com.vaadin.ui.VerticalLayout;
 
 import br.edu.utfpr.dv.sireata.bo.UsuarioBO;
 import br.edu.utfpr.dv.sireata.model.Usuario;
-import br.edu.utfpr.dv.sireata.window.EditarUsuarioWindow;
+import br.edu.utfpr.dv.sireata.view.editar.EditarUsuarioWindow;
 
 public class UsuarioView extends ListView {
 	

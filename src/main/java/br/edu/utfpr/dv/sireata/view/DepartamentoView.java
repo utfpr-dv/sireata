@@ -11,7 +11,7 @@ import br.edu.utfpr.dv.sireata.bo.DepartamentoBO;
 import br.edu.utfpr.dv.sireata.component.ComboCampus;
 import br.edu.utfpr.dv.sireata.component.ComboCampus.TipoFiltro;
 import br.edu.utfpr.dv.sireata.model.Departamento;
-import br.edu.utfpr.dv.sireata.window.EditarDepartamentoWindow;
+import br.edu.utfpr.dv.sireata.view.editar.EditarDepartamentoWindow;
 
 public class DepartamentoView extends ListView {
 
