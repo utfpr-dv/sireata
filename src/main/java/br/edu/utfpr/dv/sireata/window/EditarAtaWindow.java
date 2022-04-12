@@ -735,9 +735,7 @@ public class EditarAtaWindow extends EditarWindow {
 	}
 	
 	private void adicionarParticipante(){
-		AtaParticipante participante = new AtaParticipante();
-		
-		participante.setAta(this.ata);
+		AtaParticipante participante = new AtaParticipante(this.ata);
 		
 		this.indexParticipante = -1;
 		
@@ -830,9 +828,7 @@ public class EditarAtaWindow extends EditarWindow {
 	}
 	
 	private void adicionarAnexo(){
-		Anexo anexo = new Anexo();
-		
-		anexo.setAta(this.ata);
+		Anexo anexo = new Anexo(this.ata);
 		
 		this.indexAnexo = -1;
 		

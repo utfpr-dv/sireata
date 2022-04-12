@@ -3,17 +3,21 @@ package br.edu.utfpr.dv.sireata.model;
 public class Pauta {
 	
 	private int idPauta;
-	private Ata ata;
+	private Ata ata = new Ata();
 	private int ordem;
 	private String titulo;
 	private String descricao;
 	
 	public Pauta(){
 		this.setIdPauta(0);
-		this.setAta(new Ata());
 		this.setOrdem(1);
 		this.setTitulo("");
 		this.setDescricao("");
+	}
+	
+	public Pauta(Ata ata) {
+		this();
+		this.ata = ata;
 	}
 	
 	public int getIdPauta() {
@@ -24,9 +28,6 @@ public class Pauta {
 	}
 	public Ata getAta() {
 		return ata;
-	}
-	public void setAta(Ata ata) {
-		this.ata = ata;
 	}
 	public int getOrdem() {
 		return ordem;
