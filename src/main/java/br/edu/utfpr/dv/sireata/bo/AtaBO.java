@@ -347,36 +347,72 @@ public class AtaBO {
 			String texto;
 			DecimalFormat df = new DecimalFormat("00");
 			
+			String dataExtenso = this.getDataExtenso(ata.getData());
+			String local = StringEscapeUtils.escapeHtml4(ata.getLocalCompleto());
+			String ordinalExtenso = StringUtils.getExtensoOrdinal(ata.getNumero(), true);
+			String reuniaoTipo = (ata.getTipo() == TipoAta.ORDINARIA ? "ordinária" : "extraordinária");
+			String ano = String.valueOf(DateUtils.getYear(ata.getData()));
+			String orgaoNomeCompleto = StringEscapeUtils.escapeHtml4(orgao.getNomeCompleto());
+			String ataSecretarioNome = StringEscapeUtils.escapeHtml4(ata.getSecretario().getNome());
+			String designacao;
+			String designadoNome = StringEscapeUtils.escapeHtml4(ata.getPresidente().getNome());
+			String boldOpen = "<b>";
+			String boldClose = "</b>";
+
 			report.setNumero(df.format(ata.getNumero()) + "/" + String.valueOf(DateUtils.getYear(ata.getData())));
 			report.setDataHora(DateUtils.format(ata.getData(), "dd/MM/yyyy") + " às " + DateUtils.format(ata.getData(), "HH") + " horas" + (DateUtils.getMinute(ata.getData()) > 0 ? " e " + DateUtils.format(ata.getData(), "mm") + " minutos" : "") + ".");
 			report.setLocal(ata.getLocal());
 			report.setPresidente(ata.getPresidente().getNome());
 			report.setSecretario(ata.getSecretario().getNome());
-			
-			texto = this.getDataExtenso(ata.getData()) + ", no " + StringEscapeUtils.escapeHtml4(ata.getLocalCompleto()) + 
-					" realizou-se a " + StringUtils.getExtensoOrdinal(ata.getNumero(), true) +
-					" reunião " + (ata.getTipo() == TipoAta.ORDINARIA ? "ordinária" : "extraordinária") +
-					" de " + String.valueOf(DateUtils.getYear(ata.getData())) + " do(a) " +
-					StringEscapeUtils.escapeHtml4(orgao.getNomeCompleto()) + ", a qual foi conduzida pelo(a) " + 
-					(ata.getPresidente().getIdUsuario() == orgao.getPresidente().getIdUsuario() ? StringEscapeUtils.escapeHtml4(orgao.getDesignacaoPresidente()) + " " : "professor(a) ") +
-					StringEscapeUtils.escapeHtml4(ata.getPresidente().getNome()) + " e teve como pauta: <b>";
-			
+
+			if (ata.getPresidente().getIdUsuario() == orgao.getPresidente().getIdUsuario()) {
+				designacao = StringEscapeUtils.escapeHtml4(orgao.getDesignacaoPresidente()) + " ";
+			}else {
+				designacao = "professor(a) ";
+			}
+
+			texto = dataExtenso + ", no " + local + " realizou-se a " + ordinalExtenso +
+					" reunião " + reuniaoTipo + " de " + ano + " do(a) " + orgaoNomeCompleto +
+					", a qual foi conduzida pelo(a) " + designacao + designadoNome +
+					" e teve como pauta: " + boldOpen;
+
 			ata.setPauta(pbo.listarPorAta(idAta));
-			
-			for(int i = 1; i <= ata.getPauta().size(); i++){
-				texto += "(" + String.valueOf(i) + ") " + StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getTitulo()) + (i == ata.getPauta().size() ? "." : "; ");
+
+			for(int i = 1; i <= ata.getPauta().size(); i++) {
+				String identificador = "(" + i + ") ";
+				String pautaTitulo = StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getTitulo());
+				String pontoOuPontoEVirgula = (i == ata.getPauta().size() ? "." : "; ");
+
+				texto += identificador + pautaTitulo + pontoOuPontoEVirgula;
 			}
-			
-			texto += "</b> " + ata.getConsideracoesIniciais() + " ";
-			
+
+			texto += boldClose + " " + ata.getConsideracoesIniciais() + " ";
+
 			for(int i = 1; i <= ata.getPauta().size(); i++){
-				texto += "<b>(" + String.valueOf(i) + ") " + StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getTitulo()) + 
-						"</b>, " + StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getDescricao()) + " ";
+
+					String identificador = "(" + i + ") ";
+				String pautaTitulo = StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getTitulo());
+				String pautaDescricao = StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getDescricao());
+
+				texto += boldOpen + identificador + " " + pautaTitulo + boldClose + ", " + pautaDescricao + " ";
 			}
-			
-			texto += " Nada mais havendo a tratar, deu-se por encerrada a reunião, da qual eu, " +
-					StringEscapeUtils.escapeHtml4(ata.getSecretario().getNome()) + ", lavrei a presente ata que, após aprovada, vai assinada por mim e pelos demais presentes.";
-			
+			texto += boldClose + " " + ata.getConsideracoesIniciais() + " ";
+
+			for(int i = 1; i <= ata.getPauta().size(); i++){
+
+				String identificador = "(" + i + ") ";
+				String pautaTitulo = StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getTitulo());
+				String pautaDescricao = StringEscapeUtils.escapeHtml4(ata.getPauta().get(i - 1).getDescricao());
+
+				texto += boldOpen + identificador + " " + pautaTitulo + boldClose + ", " + pautaDescricao + " ";
+			}
+
+
+			texto += " Nada mais havendo a tratar, deu-se por encerrada a reunião, da qual eu, " + ataSecretarioNome +
+					", lavrei a presente ata que, após aprovada, vai assinada por mim e pelos demais presentes.";
+
+
+
 			report.setTexto(texto);
 			
 			ata.setParticipantes(apbo.listarPorAta(idAta));
@@ -464,7 +500,7 @@ public class AtaBO {
 			byte[] pdf = this.gerarAta(idAta);
 			
 			dao.publicar(idAta, pdf);
-		}catch(Exception e){
+		}catch(Exception e){	
 			Logger.getGlobal().log(Level.SEVERE, e.getMessage(), e);
 			
 			throw new Exception(e.getMessage());
@@ -491,28 +527,29 @@ public class AtaBO {
 	}
 	
 	private String getDataExtenso(Date data){
+		Locale BRAZIL = new Locale("pt", "BR");
 		int dia = DateUtils.getDayOfMonth(data);
 		int mes = DateUtils.getMonth(data);
 		int ano = DateUtils.getYear(data);
 		int hora = DateUtils.getHour(data);
 		int minuto = DateUtils.getMinute(data);
-		String resultado = "Ao";
-		String[] meses = {"janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"};
+		String mesExtenso = new SimpleDateFormat("MMMM", BRAZIL).format(data);
+		String anoExtenso = StringUtils.getExtenso(DateUtils.getYear(data));
+		String horaExtenso = StringUtils.getExtenso(hora);
+		String minutoExtenso = StringUtils.getExtenso(minuto);
+		String resultado = "";
+		String aos = StringUtils.tryPlural("Ao", dia);
+		String as = StringUtils.tryPlural("à", hora);
+		String horas = StringUtils.tryPlural("hora", hora);
+		String diaExtenso = dia == 1 ? "primeiro" : StringUtils.getExtenso(dia);
+		String dias = StringUtils.tryPlural("dia", dia);
+		String minutos = StringUtils.tryPlural("minuto", minuto);
 		
-		if(dia > 1){
-			resultado += "s ";
-		}else{
-			resultado += " ";	
-		}
-		
-		//Data
-		resultado += (dia == 1 ? "primeiro" : StringUtils.getExtenso(dia)) + " dia" + (dia > 1 ? "s" : "") + " do mês de " + meses[mes] + " de " + StringUtils.getExtenso(ano) + ", ";
-		//Hora
-		resultado += "à" + (hora > 1 ? "s" : "") + " " + StringUtils.getExtenso(hora) + " hora" + (hora > 1 ? "s" : "");
-		if(minuto > 0){
-			resultado += " e " + StringUtils.getExtenso(minuto) + " minuto" + (minuto > 1 ? "s" : ""); 
-		}
-		
+		resultado += aos + " " + diaExtenso + " " + dias + " do mês de " + mesExtenso + " de " + anoExtenso + ", ";
+
+		resultado += as + " " + horaExtenso + " " + horas;
+	
+		resultado += minuto > 0 ? " e " + minutoExtenso + " " + minutos : "";
 		return resultado;
 	}
 
