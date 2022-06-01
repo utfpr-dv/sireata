@@ -13,7 +13,7 @@ import br.edu.utfpr.dv.sireata.model.Ata;
 import br.edu.utfpr.dv.sireata.model.Ata.TipoAta;
 import br.edu.utfpr.dv.sireata.util.DateUtils;
 
-public class AtaDAO {
+public class AtaDAO implements DAO<Ata> {
 	
 	public Ata buscarPorId(int id) throws SQLException{
 		Connection conn = null;
@@ -569,8 +569,8 @@ public class AtaDAO {
 				conn.close();
 		}
 	}
-	
-	private Ata carregarObjeto(ResultSet rs) throws SQLException{
+
+	public Ata carregarObjeto(ResultSet rs) throws SQLException{
 		Ata ata = new Ata();
 		
 		ata.setIdAta(rs.getInt("idAta"));
@@ -696,24 +696,24 @@ public class AtaDAO {
 				conn.close();
 		}
 	}
-	
+
 	public boolean excluir(int idAta) throws SQLException{
 		Connection conn = null;
 		Statement stmt = null;
-		
+
 		try{
 			conn = ConnectionDAO.getInstance().getConnection();
 			conn.setAutoCommit(false);
 			stmt = conn.createStatement();
-			
+
 			stmt.execute("DELETE FROM comentarios WHERE idPauta IN (SELECT idPauta FROM pautas WHERE idAta=" + String.valueOf(idAta) + ")");
 			stmt.execute("DELETE FROM pautas WHERE idAta=" + String.valueOf(idAta));
 			stmt.execute("DELETE FROM ataparticipantes WHERE idAta=" + String.valueOf(idAta));
 			stmt.execute("DELETE FROM anexos WHERE idAta=" + String.valueOf(idAta));
 			boolean ret = stmt.execute("DELETE FROM atas WHERE idAta=" + String.valueOf(idAta));
-			
+
 			conn.commit();
-			
+
 			return ret;
 		}catch(SQLException ex) {
 			conn.rollback();

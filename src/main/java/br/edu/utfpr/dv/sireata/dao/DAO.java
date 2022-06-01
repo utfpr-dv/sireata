@@ -1,30 +1,14 @@
 package br.edu.utfpr.dv.sireata.dao;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
-public interface DAO<T> {
+interface DAO<T> {
 
-    T buscarPorId(int id);
+    T buscarPorId(int id) throws SQLException;
 
-    int salvar(T object);
+    int salvar(T object) throws SQLException;
 
-    void excluir(int id);
-
-    T carregarObjeto(ResultSet rs);
-
-    List<T> listar();
-
-    List<T> listarPorCampus();
-
-    List<T> listarPorAta();
-
-    List<T> listarPorDepartamento();
-
-    List<T> listarParaCriacaoAta();
-
-    List<T> listarParaConsultaAtas();
-
-    List<T> listarTodos(boolean apenasAtivos);
-
+    T carregarObjeto(ResultSet rs) throws SQLException;
 }

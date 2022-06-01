@@ -1,17 +1,12 @@
 package br.edu.utfpr.dv.sireata.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+import br.edu.utfpr.dv.sireata.model.Campus;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.utfpr.dv.sireata.model.Campus;
-
-public class CampusDAO {
+public class CampusDAO implements DAO<Campus> {
 	
 	public Campus buscarPorId(int id) throws SQLException{
 		Connection conn = null;
@@ -212,8 +207,8 @@ public class CampusDAO {
 				conn.close();
 		}
 	}
-	
-	private Campus carregarObjeto(ResultSet rs) throws SQLException{
+
+	public Campus carregarObjeto(ResultSet rs) throws SQLException{
 		Campus campus = new Campus();
 		
 		campus.setIdCampus(rs.getInt("idCampus"));

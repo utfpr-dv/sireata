@@ -12,7 +12,7 @@ import br.edu.utfpr.dv.sireata.model.Orgao;
 import br.edu.utfpr.dv.sireata.model.OrgaoMembro;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 
-public class OrgaoDAO {
+public class OrgaoDAO implements DAO<Orgao> {
 	
 	public Orgao buscarPorId(int id) throws SQLException{
 		Connection conn = null;
@@ -367,8 +367,8 @@ public class OrgaoDAO {
 			conn.setAutoCommit(true);
 		}
 	}
-	
-	private Orgao carregarObjeto(ResultSet rs) throws SQLException{
+
+	public Orgao carregarObjeto(ResultSet rs) throws SQLException{
 		Orgao orgao = new Orgao();
 		
 		orgao.setIdOrgao(rs.getInt("idOrgao"));

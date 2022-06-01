@@ -1,16 +1,12 @@
 package br.edu.utfpr.dv.sireata.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import br.edu.utfpr.dv.sireata.model.AtaParticipante;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.utfpr.dv.sireata.model.AtaParticipante;
-
-public class AtaParticipanteDAO {
+public class AtaParticipanteDAO implements DAO<AtaParticipante> {
 	
 	public AtaParticipante buscarPorId(int id) throws SQLException{
 		Connection conn = null;
@@ -135,8 +131,8 @@ public class AtaParticipanteDAO {
 				conn.close();
 		}
 	}
-	
-	private AtaParticipante carregarObjeto(ResultSet rs) throws SQLException{
+
+	public AtaParticipante carregarObjeto(ResultSet rs) throws SQLException{
 		AtaParticipante participante = new AtaParticipante();
 		
 		participante.setIdAtaParticipante(rs.getInt("idAtaParticipante"));

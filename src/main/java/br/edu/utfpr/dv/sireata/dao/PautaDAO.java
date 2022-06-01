@@ -10,7 +10,7 @@ import java.util.List;
 
 import br.edu.utfpr.dv.sireata.model.Pauta;
 
-public class PautaDAO {
+public class PautaDAO implements DAO<Pauta> {
 	
 	public Pauta buscarPorId(int id) throws SQLException{
 		Connection conn = null;
@@ -129,8 +129,8 @@ public class PautaDAO {
 				conn.close();
 		}
 	}
-	
-	private Pauta carregarObjeto(ResultSet rs) throws SQLException{
+
+	public Pauta carregarObjeto(ResultSet rs) throws SQLException{
 		Pauta pauta = new Pauta();
 		
 		pauta.setIdPauta(rs.getInt("idPauta"));

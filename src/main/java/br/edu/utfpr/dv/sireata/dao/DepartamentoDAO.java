@@ -1,17 +1,12 @@
 package br.edu.utfpr.dv.sireata.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
+import br.edu.utfpr.dv.sireata.model.Departamento;
+
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.edu.utfpr.dv.sireata.model.Departamento;
-
-public class DepartamentoDAO {
+public class DepartamentoDAO implements DAO<Departamento> {
 
 	public Departamento buscarPorId(int id) throws SQLException{
 		Connection conn = null;
@@ -253,7 +248,7 @@ public class DepartamentoDAO {
 		}
 	}
 	
-	private Departamento carregarObjeto(ResultSet rs) throws SQLException{
+	public Departamento carregarObjeto(ResultSet rs) throws SQLException{
 		Departamento departamento = new Departamento();
 		
 		departamento.setIdDepartamento(rs.getInt("idDepartamento"));

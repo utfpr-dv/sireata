@@ -10,7 +10,7 @@ import java.util.List;
 
 import br.edu.utfpr.dv.sireata.model.Usuario;
 
-public class UsuarioDAO {
+public class UsuarioDAO implements DAO<Usuario> {
 	
 	public Usuario buscarPorLogin(String login) throws SQLException{
 		Connection conn = null;
@@ -206,8 +206,8 @@ public class UsuarioDAO {
 				conn.close();
 		}
 	}
-	
-	private Usuario carregarObjeto(ResultSet rs) throws SQLException{
+
+	public Usuario carregarObjeto(ResultSet rs) throws SQLException{
 		Usuario usuario = new Usuario();
 		
 		usuario.setIdUsuario(rs.getInt("idUsuario"));

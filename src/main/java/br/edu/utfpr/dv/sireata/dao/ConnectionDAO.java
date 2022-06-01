@@ -9,6 +9,8 @@ import java.util.Properties;
 import org.apache.tomcat.jdbc.pool.DataSource;
 import org.apache.tomcat.jdbc.pool.PoolProperties;
 
+import javax.sql.DataSource;
+
 public class ConnectionDAO {
 	
 	private String SERVER = "192.168.56.20";
