@@ -12,7 +12,7 @@ import br.edu.utfpr.dv.sireata.model.Orgao;
 import br.edu.utfpr.dv.sireata.model.OrgaoMembro;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 
-public class OrgaoDAO implements DAO<Orgao> {
+public class OrgaoDAO extends DAO<Orgao> {
 	
 	public Orgao buscarPorId(int id) throws SQLException{
 		Connection conn = null;

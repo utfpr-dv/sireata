@@ -9,17 +9,18 @@ import java.util.logging.Logger;
 
 import javax.naming.CommunicationException;
 
+import br.edu.utfpr.dv.sireata.dao.DAO;
 import br.edu.utfpr.dv.sireata.dao.UsuarioDAO;
 import br.edu.utfpr.dv.sireata.ldap.LdapConfig;
 import br.edu.utfpr.dv.sireata.ldap.LdapUtils;
 import br.edu.utfpr.dv.sireata.model.Usuario;
 import br.edu.utfpr.dv.sireata.util.StringUtils;
 
-public class UsuarioBO {
+public class UsuarioBO extends BOFactory {
 	
 	public List<Usuario> listarTodos(boolean apenasAtivos) throws Exception{
 		try {
-			UsuarioDAO dao = new UsuarioDAO();
+			UsuarioDAO dao = (UsuarioDAO) createDAO();
 			
 			return dao.listarTodos(apenasAtivos);
 		} catch (SQLException e) {
@@ -31,7 +32,7 @@ public class UsuarioBO {
 	
 	public List<Usuario> listar(String nome, boolean apenasAtivos, boolean apenasExternos) throws Exception {
 		try{
-			UsuarioDAO dao = new UsuarioDAO();
+			UsuarioDAO dao = (UsuarioDAO) createDAO();
 			
 			return dao.listar(nome.trim(), apenasAtivos, apenasExternos);
 		}catch(SQLException e){
@@ -53,7 +54,7 @@ public class UsuarioBO {
 				throw new Exception("Informe o nome.");
 			}
 			
-			UsuarioDAO dao = new UsuarioDAO();
+			UsuarioDAO dao = (UsuarioDAO) createDAO();
 			
 			return dao.salvar(usuario);
 		} catch (SQLException e) {
@@ -81,7 +82,7 @@ public class UsuarioBO {
 	
 	public Usuario buscarPorLogin(String login) throws Exception{
 		try {
-			UsuarioDAO dao = new UsuarioDAO();
+			UsuarioDAO dao = (UsuarioDAO) createDAO();
 			
 			return dao.buscarPorLogin(login);
 		} catch (SQLException e) {
@@ -93,7 +94,7 @@ public class UsuarioBO {
 	
 	public Usuario buscarPorId(int id) throws Exception{
 		try {
-			UsuarioDAO dao = new UsuarioDAO();
+			UsuarioDAO dao = (UsuarioDAO) createDAO();
 			
 			return dao.buscarPorId(id);
 		} catch (SQLException e) {
@@ -105,7 +106,7 @@ public class UsuarioBO {
 	
 	public String buscarEmail(int id) throws Exception{
 		try {
-			UsuarioDAO dao = new UsuarioDAO();
+			UsuarioDAO dao = (UsuarioDAO) createDAO();
 			
 			return dao.buscarEmail(id);
 		} catch (SQLException e) {
@@ -120,7 +121,7 @@ public class UsuarioBO {
 			String hashAtual = StringUtils.generateSHA3Hash(senhaAtual);
 			String novoHash = StringUtils.generateSHA3Hash(novaSenha);
 			
-			UsuarioDAO dao = new UsuarioDAO();
+			UsuarioDAO dao = (UsuarioDAO) createDAO();
 			Usuario usuario = dao.buscarPorId(idUsuario);
 			
 			if(usuario == null){
@@ -233,14 +234,14 @@ public class UsuarioBO {
 	}
 	
 	public String[] buscarEmails(int[] ids) throws Exception{
-		UsuarioDAO dao = new UsuarioDAO();
+		UsuarioDAO dao = (UsuarioDAO) createDAO();
 		
 		return dao.buscarEmails(ids);
 	}
 	
 	public boolean podeCriarAta(int idUsuario) throws Exception{
 		try {
-			UsuarioDAO dao = new UsuarioDAO();
+			UsuarioDAO dao = (UsuarioDAO) createDAO();
 			
 			return dao.podeCriarAta(idUsuario);
 		} catch (SQLException e) {
@@ -249,5 +250,9 @@ public class UsuarioBO {
 			throw new Exception(e.getMessage());
 		}
 	}
-	
+
+	@Override
+	public DAO<Usuario> createDAO() {
+		return new UsuarioDAO();
+	}
 }

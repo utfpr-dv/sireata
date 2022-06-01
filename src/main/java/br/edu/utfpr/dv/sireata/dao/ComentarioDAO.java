@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ComentarioDAO implements DAO<Comentario> {
+public class ComentarioDAO extends DAO<Comentario> {
 	
 	public Comentario buscarPorId(int id) throws SQLException{
 		Connection conn = null;

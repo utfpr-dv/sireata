@@ -4,11 +4,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-interface DAO<T> {
+public abstract class DAO<T> {
 
-    T buscarPorId(int id) throws SQLException;
+    public DAO () {}
+    public abstract T buscarPorId(int id) throws SQLException;
 
-    int salvar(T object) throws SQLException;
+    public abstract int salvar(T object) throws SQLException;
 
-    T carregarObjeto(ResultSet rs) throws SQLException;
+    public abstract T carregarObjeto(ResultSet rs) throws SQLException;
 }

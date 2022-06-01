@@ -5,13 +5,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import br.edu.utfpr.dv.sireata.dao.AtaParticipanteDAO;
+import br.edu.utfpr.dv.sireata.dao.DAO;
 import br.edu.utfpr.dv.sireata.model.AtaParticipante;
 
-public class AtaParticipanteBO {
+public class AtaParticipanteBO extends BOFactory {
 	
 	public AtaParticipante buscarPorId(int id) throws Exception{
 		try{
-			AtaParticipanteDAO dao = new AtaParticipanteDAO();
+			AtaParticipanteDAO dao = (AtaParticipanteDAO) createDAO();
 			
 			return dao.buscarPorId(id);
 		}catch(Exception e){
@@ -23,7 +24,7 @@ public class AtaParticipanteBO {
 	
 	public List<AtaParticipante> listarPorAta(int idAta) throws Exception{
 		try{
-			AtaParticipanteDAO dao = new AtaParticipanteDAO();
+			AtaParticipanteDAO dao = (AtaParticipanteDAO) createDAO();
 			
 			return dao.listarPorAta(idAta);
 		}catch(Exception e){
@@ -53,7 +54,7 @@ public class AtaParticipanteBO {
 			
 			this.validarDados(participante);
 			
-			AtaParticipanteDAO dao = new AtaParticipanteDAO();
+			AtaParticipanteDAO dao = (AtaParticipanteDAO) createDAO();
 			
 			return dao.salvar(participante);
 		}catch(Exception e){
@@ -69,7 +70,7 @@ public class AtaParticipanteBO {
 	
 	public void excluir(int id) throws Exception{
 		try{
-			AtaParticipanteDAO dao = new AtaParticipanteDAO();
+			AtaParticipanteDAO dao = (AtaParticipanteDAO) createDAO();
 			
 			dao.excluir(id);
 		}catch(Exception e){
@@ -79,4 +80,8 @@ public class AtaParticipanteBO {
 		}
 	}
 
+	@Override
+	public DAO<AtaParticipante> createDAO() {
+		return new AtaParticipanteDAO();
+	}
 }

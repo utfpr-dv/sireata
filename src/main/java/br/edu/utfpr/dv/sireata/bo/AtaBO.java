@@ -1,5 +1,14 @@
 package br.edu.utfpr.dv.sireata.bo;
 
+import br.edu.utfpr.dv.sireata.dao.*;
+import br.edu.utfpr.dv.sireata.model.*;
+import br.edu.utfpr.dv.sireata.model.Ata.TipoAta;
+import br.edu.utfpr.dv.sireata.util.DateUtils;
+import br.edu.utfpr.dv.sireata.util.ReportUtils;
+import br.edu.utfpr.dv.sireata.util.StringUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.pdfbox.multipdf.PDFMergerUtility;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.text.DecimalFormat;
@@ -9,31 +18,11 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.pdfbox.multipdf.PDFMergerUtility;
-
-import br.edu.utfpr.dv.sireata.dao.AnexoDAO;
-import br.edu.utfpr.dv.sireata.dao.AtaDAO;
-import br.edu.utfpr.dv.sireata.dao.AtaParticipanteDAO;
-import br.edu.utfpr.dv.sireata.dao.OrgaoDAO;
-import br.edu.utfpr.dv.sireata.dao.PautaDAO;
-import br.edu.utfpr.dv.sireata.model.Anexo;
-import br.edu.utfpr.dv.sireata.model.Ata;
-import br.edu.utfpr.dv.sireata.model.Pauta;
-import br.edu.utfpr.dv.sireata.util.DateUtils;
-import br.edu.utfpr.dv.sireata.util.ReportUtils;
-import br.edu.utfpr.dv.sireata.util.StringUtils;
-import br.edu.utfpr.dv.sireata.model.Ata.TipoAta;
-import br.edu.utfpr.dv.sireata.model.AtaParticipante;
-import br.edu.utfpr.dv.sireata.model.AtaReport;
-import br.edu.utfpr.dv.sireata.model.Orgao;
-import br.edu.utfpr.dv.sireata.model.ParticipanteReport;
-
-public class AtaBO {
+public class AtaBO extends BOFactory {
 	
 	public Ata buscarPorId(int id) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.buscarPorId(id);
 		}catch(Exception e){
@@ -45,7 +34,7 @@ public class AtaBO {
 	
 	public Ata buscarPorNumero(int idOrgao, TipoAta tipo, int numero, int ano) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.buscarPorNumero(idOrgao, tipo, numero, ano);
 		}catch(Exception e){
@@ -57,7 +46,7 @@ public class AtaBO {
 	
 	public Ata buscarPorPauta(int idPauta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.buscarPorPauta(idPauta);
 		}catch(Exception e){
@@ -69,7 +58,7 @@ public class AtaBO {
 	
 	public int buscarProximoNumeroAta(int idOrgao, int ano, TipoAta tipo) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.buscarProximoNumeroAta(idOrgao, ano, tipo);
 		}catch(Exception e){
@@ -81,7 +70,7 @@ public class AtaBO {
 	
 	public List<Ata> listarPublicadas() throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.listarPublicadas();
 		}catch(Exception e){
@@ -93,7 +82,7 @@ public class AtaBO {
 	
 	public List<Ata> listarPorOrgao(int idOrgao) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.listarPorOrgao(idOrgao);
 		}catch(Exception e){
@@ -105,7 +94,7 @@ public class AtaBO {
 	
 	public List<Ata> listarPorDepartamento(int idDepartamento) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.listarPorDepartamento(idDepartamento);
 		}catch(Exception e){
@@ -117,7 +106,7 @@ public class AtaBO {
 	
 	public List<Ata> listarPorCampus(int idCampus) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.listarPorCampus(idCampus);
 		}catch(Exception e){
@@ -129,7 +118,7 @@ public class AtaBO {
 	
 	public List<Ata> listarNaoPublicadas(int idUsuario) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.listarNaoPublicadas(idUsuario);
 		}catch(Exception e){
@@ -141,7 +130,7 @@ public class AtaBO {
 	
 	public List<Ata> listarPorOrgao(int idOrgao, int idUsuario) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.listarPorOrgao(idOrgao, idUsuario);
 		}catch(Exception e){
@@ -153,7 +142,7 @@ public class AtaBO {
 	
 	public List<Ata> listarPorDepartamento(int idDepartamento, int idUsuario) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.listarPorDepartamento(idDepartamento, idUsuario);
 		}catch(Exception e){
@@ -165,7 +154,7 @@ public class AtaBO {
 	
 	public List<Ata> listarPorCampus(int idCampus, int idUsuario) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.listarPorCampus(idCampus, idUsuario);
 		}catch(Exception e){
@@ -201,7 +190,7 @@ public class AtaBO {
 	
 	public int salvar(Ata ata) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			int id = dao.salvar(ata);
 			
@@ -254,7 +243,7 @@ public class AtaBO {
 	
 	public boolean temComentarios(int idAta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.temComentarios(idAta);
 		}catch(Exception e){
@@ -266,7 +255,7 @@ public class AtaBO {
 	
 	public boolean isPresidenteOuSecretario(int idUsuario, int idAta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.isPresidenteOuSecretario(idUsuario, idAta);
 		}catch(Exception e){
@@ -278,7 +267,7 @@ public class AtaBO {
 	
 	public boolean isPresidente(int idUsuario, int idAta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.isPresidente(idUsuario, idAta);
 		}catch(Exception e){
@@ -290,7 +279,7 @@ public class AtaBO {
 	
 	public boolean isPublicada(int idAta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.isPublicada(idAta);
 		}catch(Exception e){
@@ -306,7 +295,7 @@ public class AtaBO {
 	
 	public void liberarComentarios(int idAta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			dao.liberarComentarios(idAta);
 		}catch(Exception e){
@@ -322,7 +311,7 @@ public class AtaBO {
 	
 	public void bloquearComentarios(int idAta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			dao.bloquearComentarios(idAta);
 		}catch(Exception e){
@@ -460,7 +449,7 @@ public class AtaBO {
 	
 	public void publicar(int idAta) throws Exception{
 		try{
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			byte[] pdf = this.gerarAta(idAta);
 			
 			dao.publicar(idAta, pdf);
@@ -480,7 +469,7 @@ public class AtaBO {
 				throw new Exception("A ata já foi publicada e não pode ser excluída.");
 			}
 			
-			AtaDAO dao = new AtaDAO();
+			AtaDAO dao = (AtaDAO) createDAO();
 			
 			return dao.excluir(idAta);
 		}catch(Exception e){
@@ -516,4 +505,8 @@ public class AtaBO {
 		return resultado;
 	}
 
+	@Override
+	public DAO<Ata> createDAO() {
+		return new AtaDAO();
+	}
 }

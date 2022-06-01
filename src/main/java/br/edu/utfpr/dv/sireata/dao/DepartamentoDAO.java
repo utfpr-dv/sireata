@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DepartamentoDAO implements DAO<Departamento> {
+public class DepartamentoDAO extends DAO<Departamento> {
 
 	public Departamento buscarPorId(int id) throws SQLException{
 		Connection conn = null;

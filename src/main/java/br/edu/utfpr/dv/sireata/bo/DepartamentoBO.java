@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import br.edu.utfpr.dv.sireata.dao.DAO;
 import br.edu.utfpr.dv.sireata.dao.DepartamentoDAO;
 import br.edu.utfpr.dv.sireata.model.Departamento;
 
-public class DepartamentoBO {
+public class DepartamentoBO extends BOFactory{
 	
 	public Departamento buscarPorId(int id) throws Exception{
 		try{
-			DepartamentoDAO dao = new DepartamentoDAO();
+			DepartamentoDAO dao = (DepartamentoDAO) createDAO();
 			
 			return dao.buscarPorId(id);
 		}catch(Exception e){
@@ -23,7 +24,7 @@ public class DepartamentoBO {
 	
 	public Departamento buscarPorOrgao(int idOrgao) throws Exception{
 		try{
-			DepartamentoDAO dao = new DepartamentoDAO();
+			DepartamentoDAO dao = (DepartamentoDAO) createDAO();
 			
 			return dao.buscarPorOrgao(idOrgao);
 		}catch(Exception e){
@@ -35,7 +36,7 @@ public class DepartamentoBO {
 	
 	public List<Departamento> listarTodos(boolean apenasAtivos) throws Exception{
 		try{
-			DepartamentoDAO dao = new DepartamentoDAO();
+			DepartamentoDAO dao = (DepartamentoDAO) createDAO();
 			
 			return dao.listarTodos(apenasAtivos);
 		}catch(Exception e){
@@ -47,7 +48,7 @@ public class DepartamentoBO {
 	
 	public List<Departamento> listarPorCampus(int idCampus, boolean apenasAtivos) throws Exception{
 		try{
-			DepartamentoDAO dao = new DepartamentoDAO();
+			DepartamentoDAO dao = (DepartamentoDAO) createDAO();
 			
 			return dao.listarPorCampus(idCampus, apenasAtivos);
 		}catch(Exception e){
@@ -59,7 +60,7 @@ public class DepartamentoBO {
 	
 	public List<Departamento> listarParaCriacaoAta(int idCampus, int idUsuario) throws Exception{
 		try{
-			DepartamentoDAO dao = new DepartamentoDAO();
+			DepartamentoDAO dao = (DepartamentoDAO) createDAO();
 			
 			return dao.listarParaCriacaoAta(idCampus, idUsuario);
 		}catch(Exception e){
@@ -71,7 +72,7 @@ public class DepartamentoBO {
 	
 	public List<Departamento> listarParaConsultaAtas(int idCampus, int idUsuario) throws Exception{
 		try{
-			DepartamentoDAO dao = new DepartamentoDAO();
+			DepartamentoDAO dao = (DepartamentoDAO) createDAO();
 			
 			return dao.listarParaConsultaAtas(idCampus, idUsuario);
 		}catch(Exception e){
@@ -90,7 +91,7 @@ public class DepartamentoBO {
 		}
 		
 		try{
-			DepartamentoDAO dao = new DepartamentoDAO();
+			DepartamentoDAO dao = (DepartamentoDAO) createDAO();
 			
 			return dao.salvar(departamento);
 		}catch(Exception e){
@@ -100,4 +101,8 @@ public class DepartamentoBO {
 		}
 	}
 
+	@Override
+	public DAO<Departamento> createDAO() {
+		return new DepartamentoDAO();
+	}
 }

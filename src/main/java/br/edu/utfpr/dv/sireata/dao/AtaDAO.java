@@ -13,7 +13,7 @@ import br.edu.utfpr.dv.sireata.model.Ata;
 import br.edu.utfpr.dv.sireata.model.Ata.TipoAta;
 import br.edu.utfpr.dv.sireata.util.DateUtils;
 
-public class AtaDAO implements DAO<Ata> {
+public class AtaDAO extends DAO<Ata> {
 	
 	public Ata buscarPorId(int id) throws SQLException{
 		Connection conn = null;

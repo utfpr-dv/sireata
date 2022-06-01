@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import br.edu.utfpr.dv.sireata.dao.DAO;
 import br.edu.utfpr.dv.sireata.dao.PautaDAO;
 import br.edu.utfpr.dv.sireata.model.Pauta;
 
-public class PautaBO {
+public class PautaBO extends BOFactory {
 	
 	public Pauta buscarPorId(int id) throws Exception{
 		try{
-			PautaDAO dao = new PautaDAO();
+			PautaDAO dao = (PautaDAO) createDAO();
 			
 			return dao.buscarPorId(id);
 		}catch(Exception e){
@@ -23,7 +24,7 @@ public class PautaBO {
 	
 	public List<Pauta> listarPorAta(int idAta) throws Exception{
 		try{
-			PautaDAO dao = new PautaDAO();
+			PautaDAO dao = (PautaDAO) createDAO();
 			
 			return dao.listarPorAta(idAta);
 		}catch(Exception e){
@@ -47,7 +48,7 @@ public class PautaBO {
 			
 			this.validarDados(pauta);
 			
-			PautaDAO dao = new PautaDAO();
+			PautaDAO dao = (PautaDAO) createDAO();
 			
 			return dao.salvar(pauta);
 		}catch(Exception e){
@@ -63,7 +64,7 @@ public class PautaBO {
 	
 	public void excluir(int id) throws Exception{
 		try{
-			PautaDAO dao = new PautaDAO();
+			PautaDAO dao = (PautaDAO) createDAO();
 			
 			dao.excluir(id);
 		}catch(Exception e){
@@ -73,4 +74,8 @@ public class PautaBO {
 		}
 	}
 
+	@Override
+	public DAO<Pauta> createDAO() {
+		return new PautaDAO();
+	}
 }

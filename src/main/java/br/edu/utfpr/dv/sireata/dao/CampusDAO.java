@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CampusDAO implements DAO<Campus> {
+public class CampusDAO extends DAO<Campus> {
 	
 	public Campus buscarPorId(int id) throws SQLException{
 		Connection conn = null;

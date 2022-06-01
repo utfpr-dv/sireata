@@ -1,18 +1,19 @@
 package br.edu.utfpr.dv.sireata.bo;
 
+import br.edu.utfpr.dv.sireata.dao.ComentarioDAO;
+import br.edu.utfpr.dv.sireata.dao.DAO;
+import br.edu.utfpr.dv.sireata.model.Comentario;
+import br.edu.utfpr.dv.sireata.model.Comentario.SituacaoComentario;
+
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import br.edu.utfpr.dv.sireata.dao.ComentarioDAO;
-import br.edu.utfpr.dv.sireata.model.Comentario;
-import br.edu.utfpr.dv.sireata.model.Comentario.SituacaoComentario;
-
-public class ComentarioBO {
+public class ComentarioBO extends BOFactory{
 	
 	public Comentario buscarPorId(int id) throws Exception{
 		try{
-			ComentarioDAO dao = new ComentarioDAO();
+			ComentarioDAO dao = (ComentarioDAO) createDAO();
 			
 			return dao.buscarPorId(id);
 		}catch(Exception e){
@@ -24,7 +25,7 @@ public class ComentarioBO {
 	
 	public Comentario buscarPorUsuario(int idUsuario, int idPauta) throws Exception{
 		try{
-			ComentarioDAO dao = new ComentarioDAO();
+			ComentarioDAO dao = (ComentarioDAO) createDAO();
 			
 			return dao.buscarPorUsuario(idUsuario, idPauta);
 		}catch(Exception e){
@@ -36,7 +37,7 @@ public class ComentarioBO {
 	
 	public List<Comentario> listarPorPauta(int idPauta) throws Exception{
 		try{
-			ComentarioDAO dao = new ComentarioDAO();
+			ComentarioDAO dao = (ComentarioDAO) createDAO();
 			
 			return dao.listarPorPauta(idPauta);
 		}catch(Exception e){
@@ -63,7 +64,7 @@ public class ComentarioBO {
 			
 			this.validarDados(comentario);
 			
-			ComentarioDAO dao = new ComentarioDAO();
+			ComentarioDAO dao = (ComentarioDAO) createDAO();
 			
 			return dao.salvar(comentario);
 		}catch(Exception e){
@@ -73,4 +74,8 @@ public class ComentarioBO {
 		}
 	}
 
+	@Override
+	public DAO<Comentario> createDAO() {
+		return new ComentarioDAO();
+	}
 }

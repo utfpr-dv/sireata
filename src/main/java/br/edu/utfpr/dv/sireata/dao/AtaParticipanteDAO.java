@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AtaParticipanteDAO implements DAO<AtaParticipante> {
+public class AtaParticipanteDAO extends DAO<AtaParticipante> {
 	
 	public AtaParticipante buscarPorId(int id) throws SQLException{
 		Connection conn = null;
